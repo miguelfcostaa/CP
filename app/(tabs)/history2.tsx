@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Image, StyleSheet, Text, Dimensions,TouchableOpacity } from 'react-native';
+import { View, Image, StyleSheet, Text, Dimensions, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 
 const { width, height } = Dimensions.get('window');
@@ -16,20 +16,20 @@ export default function HistoryScreen() {
       <View style={styles.imageWrapper}>
         <View style={styles.blueBackground} />
         <Image
-          source={require('@/assets/images/cat-image.png')} 
+          source={require('@/assets/images/cat-image2.png')} 
           style={styles.catImage}
         />
       </View>
 
       <View style={styles.textContainer}>
         <Text style={styles.text}>
-          Our company works in helping cats that are in the streets and in this application you can help them! 
-          Here you can have a digital cat where you can treat him and buy some food that is gonna turn to money to help our company.
+        In our application you can have fun treating an digital where you can customize him, 
+        bath him, feed him and buy some food to help not just this cat but many others with our company!
         </Text>
       </View>
       <TouchableOpacity
         style={styles.arrowButton}
-        onPress={() => router.push('/history2')} 
+        onPress={() => router.push('/history')} 
       >
         <Image
           source={require('@/assets/icons/next.png')} 
@@ -96,9 +96,10 @@ const styles = StyleSheet.create({
   arrowButton: {
     position: 'absolute',
     bottom: height * 0.37, 
-    right: width * 0.0001, 
+    left: width * 0.0001, 
     padding: 10,
     elevation: 5, 
+    transform: [{ rotate: '180deg' }]
   },
   arrowIcon: {
     width: 50, 
