@@ -10,8 +10,7 @@ export default function TabLayout() {
         headerShown: false,
         tabBarStyle: {
           backgroundColor: '#098AC8',
-          height: 105,
-          padding: 30,
+          height: "10%",
         },
       }}>
       <Tabs.Screen
@@ -37,6 +36,34 @@ export default function TabLayout() {
             <>
               <Image
                 source={require('@/assets/icons/shop_button.png')}
+                style={styles.icon}
+              />
+            </>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="friends"
+        options={{
+          title: '',
+          tabBarIcon: ({ color, focused }) => (
+            <>
+              <Image
+                source={require('@/assets/icons/friends_button.png')}
+                style={styles.icon}
+              />
+            </>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="shower"
+        options={{
+          title: '',
+          tabBarIcon: ({ color, focused }) => (
+            <>
+              <Image
+                source={require('@/assets/icons/shower_button.png')}
                 style={styles.icon}
               />
             </>

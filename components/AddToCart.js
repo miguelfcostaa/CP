@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
         width: 160,
         height: 35,
         flexDirection: 'row',
-        backgroundColor: 'green',
+        backgroundColor: '#10CC1D',
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 10,
