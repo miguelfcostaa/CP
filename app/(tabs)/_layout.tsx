@@ -70,6 +70,12 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="cart"
+        options={{
+          href: null, 
+        }}
+      />
     </Tabs>
   );
 }

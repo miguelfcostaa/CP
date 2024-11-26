@@ -12,11 +12,15 @@ import {
 import ShopItem from '@/components/ShopItem';
 import AddToCart from '@/components/AddToCart';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { useRouter } from 'expo-router';
+
 
 export default function ShopScreen() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const drawerAnimation = useRef(new Animated.Value(-200)).current; 
   const buttonAnimation = useRef(new Animated.Value(0)).current;
+
+  const router = useRouter();
 
   const toggleDrawer = () => {
     if (drawerOpen) {
@@ -79,17 +83,20 @@ export default function ShopScreen() {
 
       {/* Header */}
       <View style={styles.header}>
-        <Image
-          source={require('@/assets/icons/goBack_icon.png')}
-          style={styles.goBack}
-        />
+        <TouchableOpacity onPress={() => router.push('/')} >
+          <Image
+            source={require('@/assets/icons/goBack_icon.png')}
+            style={styles.goBack}
+          />
+        </TouchableOpacity>
 
         <Text style={styles.title}>Shop</Text>
-
-        <Image
-          source={require('@/assets/icons/cart_icon_items.png')}
-          style={styles.cartItems}
-        />
+        <TouchableOpacity onPress={() => router.push('/cart')} >
+          <Image
+            source={require('@/assets/icons/cart_icon_items.png')}
+            style={styles.cartItems}
+          />
+        </TouchableOpacity>
         <Text style={styles.numberCartItems}>0</Text>
       </View>
 
@@ -199,20 +206,20 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     marginLeft: '5%',
-    marginTop: '15%',
+    marginTop: '90%',
   },
   cartItems: {
     width: 48,
     height: 48,
     marginRight: '5%',
-    marginTop: '15%',
+    marginTop: '90%',
   },
   numberCartItems: {
     position: 'absolute',
     width: 48,
     height: 48,
-    left: 353,
-    top: 60,
+    left: 355,
+    top: 62,
     color: '#FFFFFF',
   },
   shopContainer: {
