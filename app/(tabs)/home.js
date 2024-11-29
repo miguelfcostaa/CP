@@ -12,8 +12,12 @@ export default function HomeScreen() {
         style={styles.backgroundImage}
       />
 
-
-
+      <View style={styles.flex}>
+        <Image
+          source={require('@/assets/images/dirty-cat.png')}
+          style={styles.cat}
+        />
+      </View>
     </View>
       
   );
@@ -31,9 +35,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     ...StyleSheet.absoluteFillObject,
   },
-  button: {
-    backgroundColor: '#fff',
-    padding: 10,
+  flex: {
+    display: 'flex',
+    marginTop: 300,
   },
+  cat: {
+    width: 255,
+    height: 262,
+  },
+
 
 });

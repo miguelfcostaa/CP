@@ -19,56 +19,92 @@ export default function TabLayout() {
         name="home"
         options={{
           title: '',
-          tabBarIcon: ({ color, focused }) => (
-            <>
-              <Image
-                source={require('@/assets/icons/home_button.png')}
-                style={styles.icon}
-              />
-            </>
-          ),
+          tabBarIcon: ({ color, focused }) => {
+            if (focused) {
+              return (
+                <Image
+                  source={require('@/assets/icons/home_button_focused.png')}
+                  style={styles.icon}
+                />
+              );
+            } else {
+              return (
+                <Image
+                  source={require('@/assets/icons/home_button.png')}
+                  style={styles.icon}
+                />
+              );
+            }
+          },
         }}
       />
       <Tabs.Screen
         name="shop"
         options={{
           title: '',
-          tabBarIcon: ({ color, focused }) => (
-            <>
-              <Image
-                source={require('@/assets/icons/shop_button.png')}
-                style={styles.icon}
-              />
-            </>
-          ),
+          tabBarIcon: ({ color, focused }) => {
+            if (focused) {
+              return (
+                <Image
+                  source={require('@/assets/icons/shop_button_focused.png')}
+                  style={styles.icon}
+                />
+              );
+            } else {
+              return (
+                <Image
+                  source={require('@/assets/icons/shop_button.png')}
+                  style={styles.icon}
+                />
+              );
+            }
+          },
         }}
       />
       <Tabs.Screen
         name="friends"
         options={{
           title: '',
-          tabBarIcon: ({ color, focused }) => (
-            <>
-              <Image
-                source={require('@/assets/icons/friends_button.png')}
-                style={styles.icon}
-              />
-            </>
-          ),
+          tabBarIcon: ({ color, focused }) => {
+            if (focused) {
+              return (
+                <Image
+                  source={require('@/assets/icons/friends_button_focused.png')}
+                  style={styles.icon}
+                />
+              );
+            } else {
+              return (
+                <Image
+                  source={require('@/assets/icons/friends_button.png')}
+                  style={styles.icon}
+                />
+              );
+            }
+          },
         }}
       />
       <Tabs.Screen
         name="shower"
         options={{
           title: '',
-          tabBarIcon: ({ color, focused }) => (
-            <>
-              <Image
-                source={require('@/assets/icons/shower_button.png')}
-                style={styles.icon}
-              />
-            </>
-          ),
+          tabBarIcon: ({ color, focused }) => {
+            if (focused) {
+              return (
+                <Image
+                  source={require('@/assets/icons/shower_button_focused.png')}
+                  style={styles.icon}
+                />
+              );
+            } else {
+              return (
+                <Image
+                  source={require('@/assets/icons/shower_button.png')}
+                  style={styles.icon}
+                />
+              );
+            }
+          },
         }}
       />
       <Tabs.Screen
