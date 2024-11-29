@@ -1,7 +1,11 @@
 import React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { Button, Image, StyleSheet, View } from 'react-native';
+import { useRouter } from 'expo-router';
 
 export default function HomeScreen() {
+
+  const router = useRouter();
+
   return (
     <View style={styles.container}>
 
@@ -28,6 +32,10 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     ...StyleSheet.absoluteFillObject,
+  },
+  button: {
+    backgroundColor: '#fff',
+    padding: 10,
   },
 
 });

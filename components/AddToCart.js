@@ -1,35 +1,28 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
-const AddToCart = () => {
-    const [isAdded, setIsAdded] = useState(false);
+
+const AddToCart = ({ onAddToCart, onRemoveFromCart, isAdded  }) => { 
 
     const handleAddToCart = () => {
-        setIsAdded(true);
+        if (onAddToCart) onAddToCart(); 
     };
 
     const handleRemoveFromCart = () => {
-        setIsAdded(false);
+        if (onRemoveFromCart) onRemoveFromCart(); 
     };
 
-    if (isAdded) {
-        return (
-            <TouchableOpacity onPress={handleRemoveFromCart}>
-                <View style={styles.container_added} >
-                    <Image
-                        source={require('../assets/icons/Check_icon.png')}
-                        style={styles.icon_added}
-                    />
-                </View>
-            </TouchableOpacity>
-        );
-    }
-
     return (
-        <TouchableOpacity style={styles.touchable} onPress={handleAddToCart}>
-            <View style={styles.container} >
-                <Text style={styles.text} >ADD TO CART</Text>
-                <Image source={require('@/assets/icons/cart_icon.png')} style={styles.image} />
+        <TouchableOpacity onPress={isAdded ? handleRemoveFromCart : handleAddToCart}>
+            <View style={isAdded ? styles.container_added : styles.container}>
+                {isAdded ? (
+                    <Image source={require('@/assets/icons/check_icon.png')} style={styles.icon_added} />
+                ) : (
+                    <>
+                        <Text style={styles.text}>ADD TO CART</Text>
+                        <Image source={require('@/assets/icons/cart_icon.png')} style={styles.image} />
+                    </>
+                )}
             </View>
         </TouchableOpacity>
     );
@@ -54,10 +47,6 @@ const styles = StyleSheet.create({
     image: {
         width: 17,
         height: 17,
-    },
-    touchable: {
-        flexDirection: 'row',
-        alignItems: 'center',
     },
     container_added: {
         borderRadius: 10,

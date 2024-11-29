@@ -1,10 +1,12 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { View, Image } from 'react-native';
+import { CartProvider } from '@/contexts/CartContext';
 
 export default function TabLayout() {
 
   return (
+    <CartProvider>
     <Tabs
       screenOptions={{
         headerShown: false,
@@ -14,8 +16,7 @@ export default function TabLayout() {
         },
       }}>
       <Tabs.Screen
-        
-        name="index"
+        name="home"
         options={{
           title: '',
           tabBarIcon: ({ color, focused }) => (
@@ -76,7 +77,15 @@ export default function TabLayout() {
           href: null, 
         }}
       />
+      <Tabs.Screen
+        name="index"
+        options={{
+          href: null, 
+          tabBarStyle: { display: "none" }
+        }}
+      />
     </Tabs>
+    </CartProvider>
   );
 }
 

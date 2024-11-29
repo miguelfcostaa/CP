@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   StyleSheet,
   View,
@@ -13,14 +13,65 @@ import ShopItem from '@/components/ShopItem';
 import AddToCart from '@/components/AddToCart';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { useRouter } from 'expo-router';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '@/firebaseConfig'; 
+import { useCart } from '@/contexts/CartContext';
 
 
 export default function ShopScreen() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [shopItems, setShopItems] = useState([]);
+
+  const { cart, cartCount, setIsAdded, setCartCount, addToCart, removeFromCart, findItemInCart } = useCart();
+  const router = useRouter();
+
   const drawerAnimation = useRef(new Animated.Value(-200)).current; 
   const buttonAnimation = useRef(new Animated.Value(0)).current;
 
-  const router = useRouter();
+  useEffect(() => {
+    const fetchShopItems = async () => {
+      try {
+        const itemsCollection = collection(db, 'shopItems');
+        const itemsSnapshot = await getDocs(itemsCollection);
+        if (itemsSnapshot.empty) {
+          console.log("A coleção 'shopItems' está vazia.");
+        } else {
+          const itemsList = itemsSnapshot.docs.map(doc => {
+            return { id: doc.id, ...doc.data() }; 
+          });
+          setShopItems(itemsList);
+        }
+      } catch (error) {
+        console.error("Erro ao buscar itens da loja:", error.message);
+      }
+    };
+  
+    fetchShopItems();
+  }, []);
+
+  const handleAddToCart = (item) => {
+    if (!findItemInCart(item.id)) {
+      addToCart(item);
+      setCartCount(cartCount + 1);  
+      setIsAdded(true);
+    }
+  };
+
+  const handleRemoveFromCart = (item) => {
+    removeFromCart(item.id); 
+    setCartCount(cartCount - 1); 
+    setIsAdded(false);
+  };
+
+  const isItemInCart = (itemId) => {
+    return !!findItemInCart(itemId);
+  };
+  
+  const handleGoToCart = () => {
+    router.push({
+      pathname: '/cart',
+    });
+  };
 
   const toggleDrawer = () => {
     if (drawerOpen) {
@@ -84,40 +135,34 @@ export default function ShopScreen() {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.push('/')} >
-          <Image
-            source={require('@/assets/icons/goBack_icon.png')}
-            style={styles.goBack}
-          />
+        <Image
+          source={require('@/assets/icons/goBack_icon.png')}
+          style={styles.goBack}
+        />
         </TouchableOpacity>
 
         <Text style={styles.title}>Shop</Text>
-        <TouchableOpacity onPress={() => router.push('/cart')} >
+        <TouchableOpacity onPress={handleGoToCart}>
           <Image
             source={require('@/assets/icons/cart_icon_items.png')}
             style={styles.cartItems}
           />
         </TouchableOpacity>
-        <Text style={styles.numberCartItems}>0</Text>
+        <Text style={styles.numberCartItems}> {cartCount} </Text>
       </View>
 
       {/* Itens da loja */}
       <View style={styles.shopContainer}>
-        <View style={styles.shopItemFlex}>
-          <ShopItem image={"cat-food"} name={"Cat food"} price={"5"} />
-          <AddToCart />
-        </View>
-        <View style={styles.shopItemFlex}>
-          <ShopItem image={"water"} name={"Water"} price={"2"} />
-          <AddToCart />
-        </View>
-        <View style={styles.shopItemFlex}>
-          <ShopItem image={"cat-bed"} name={"Cat Bed"} price={"15"} />
-          <AddToCart />
-        </View>
-        <View style={styles.shopItemFlex}>
-          <ShopItem image={"cat-bed-deluxe"} name={"Cat Bed Deluxe"} price={"18"} />
-          <AddToCart />
-        </View>
+          {shopItems.map((item) => (
+              <View key={item.id} style={styles.shopItemFlex}>
+                  <ShopItem image={item.image} name={item.name} price={item.price} />
+                  <AddToCart 
+                    onAddToCart={() => handleAddToCart(item)} 
+                    onRemoveFromCart={() => handleRemoveFromCart(item)} // A mesma função pode ser usada para adicionar e remover
+                    isAdded={isItemInCart(item.id)}
+                  />
+              </View>
+          ))}
       </View>
 
       {/* Drawer */}
@@ -138,7 +183,7 @@ export default function ShopScreen() {
                   fillColor='#1ED73A'
                   unFillColor='#3390C9'
                   iconStyle={{ borderRadius: 8 }}
-                  onPress={(isChecked: boolean) => {}} 
+                  onPress={(isChecked) => {}} 
                   size={25}
                   text="Food"
                   textStyle={{color: '#fff', fontSize: 20}}
@@ -149,7 +194,7 @@ export default function ShopScreen() {
                   fillColor='#1ED73A'
                   unFillColor='#3390C9'
                   iconStyle={{ borderRadius: 8 }}
-                  onPress={(isChecked: boolean) => {}} 
+                  onPress={(isChecked) => {}} 
                   size={25}
                   text="Cosmetics"
                   textStyle={{color: '#fff', fontSize: 20}}
@@ -218,8 +263,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 48,
     height: 48,
-    left: 355,
-    top: 62,
+    left: 352,
+    top: 63,
     color: '#FFFFFF',
   },
   shopContainer: {
