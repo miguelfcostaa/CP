@@ -6,6 +6,7 @@ const imageMap = {
     "water": require('@/assets/images/water.png'),
     "cat-bed": require('@/assets/images/cat-bed.png'),
     "cat-bed-deluxe": require('@/assets/images/cat-bed-deluxe.png'),
+    "red-shirt-cat": require('@/assets/images/red-shirt-cat.png'),
 };
 
 const ShopItem = ({ image, name, price }) => {

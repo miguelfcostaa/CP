@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   Animated,
   TouchableWithoutFeedback,
-  Button
+  Button,
+  ScrollView
 } from 'react-native';
 import ShopItem from '@/components/ShopItem';
 import AddToCart from '@/components/AddToCart';
@@ -16,11 +17,13 @@ import { useRouter } from 'expo-router';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebaseConfig'; 
 import { useCart } from '@/contexts/CartContext';
+import { query, where } from 'firebase/firestore';
 
 
 export default function ShopScreen() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [shopItems, setShopItems] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
   const { cart, cartCount, setIsAdded, setCartCount, addToCart, removeFromCart, findItemInCart } = useCart();
   const router = useRouter();
@@ -45,8 +48,10 @@ export default function ShopScreen() {
         console.error("Erro ao buscar itens da loja:", error.message);
       }
     };
-  
+    
+
     fetchShopItems();
+
   }, []);
 
   const handleAddToCart = (item) => {
@@ -71,6 +76,49 @@ export default function ShopScreen() {
     router.push({
       pathname: '/cart',
     });
+  };
+
+  const handleFilterItems = async (category, isChecked) => {
+    let updatedCategories;
+  
+    if (isChecked) {
+      updatedCategories = [...selectedCategories, category];
+    } else {
+      updatedCategories = selectedCategories.filter(c => c !== category);
+    }
+  
+    setSelectedCategories(updatedCategories);
+  
+    if (updatedCategories.length > 0) {
+      try {
+        const itemsCollection = collection(db, 'shopItems');
+        
+        const queryRef = query(itemsCollection, where('category', 'in', updatedCategories));
+        
+        const itemsSnapshot = await getDocs(queryRef);
+  
+        const filteredItems = itemsSnapshot.docs.map(doc => {
+          return { id: doc.id, ...doc.data() };
+        });
+  
+        setShopItems(filteredItems);
+      } catch (error) {
+        console.error("Erro ao buscar itens da loja:", error.message);
+      }
+    } else {
+      try {
+        const itemsCollection = collection(db, 'shopItems');
+        const itemsSnapshot = await getDocs(itemsCollection);
+  
+        const itemsList = itemsSnapshot.docs.map(doc => {
+          return { id: doc.id, ...doc.data() };
+        });
+  
+        setShopItems(itemsList);
+      } catch (error) {
+        console.error("Erro ao buscar itens da loja:", error.message);
+      }
+    }
   };
 
   const toggleDrawer = () => {
@@ -134,7 +182,7 @@ export default function ShopScreen() {
 
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.push('/')} >
+        <TouchableOpacity onPress={() => router.push('/home')} >
         <Image
           source={require('@/assets/icons/goBack_icon.png')}
           style={styles.goBack}
@@ -151,8 +199,9 @@ export default function ShopScreen() {
         <Text style={styles.numberCartItems}> {cartCount} </Text>
       </View>
 
-      {/* Itens da loja */}
-      <View style={styles.shopContainer}>
+      {/* Itens da loja */} 
+      <ScrollView>
+        <View style={styles.shopContainer}>
           {shopItems.map((item) => (
               <View key={item.id} style={styles.shopItemFlex}>
                   <ShopItem image={item.image} name={item.name} price={item.price} />
@@ -163,7 +212,8 @@ export default function ShopScreen() {
                   />
               </View>
           ))}
-      </View>
+        </View>
+      </ScrollView>
 
       {/* Drawer */}
       {drawerOpen && (
@@ -183,31 +233,27 @@ export default function ShopScreen() {
                   fillColor='#1ED73A'
                   unFillColor='#3390C9'
                   iconStyle={{ borderRadius: 8 }}
-                  onPress={(isChecked) => {}} 
+                  onPress={(isChecked) => {handleFilterItems('food', isChecked)}} 
                   size={25}
                   text="Food"
                   textStyle={{color: '#fff', fontSize: 20}}
                   style={{ flexDirection: 'row-reverse', marginRight: 10, marginLeft: -10 }}
                   innerIconStyle={{ borderRadius: 8, borderWidth: 2, borderColor: '#fff' }}
+                  isChecked={selectedCategories.includes('food')}
+                  onChange={(isChecked) => {handleFilterItems('food', isChecked)}}
                 />  
                 <BouncyCheckbox 
                   fillColor='#1ED73A'
                   unFillColor='#3390C9'
                   iconStyle={{ borderRadius: 8 }}
-                  onPress={(isChecked) => {}} 
+                  onPress={(isChecked) => {handleFilterItems('cosmetics', isChecked)}} 
                   size={25}
                   text="Cosmetics"
                   textStyle={{color: '#fff', fontSize: 20}}
                   style={{ flexDirection: 'row-reverse', marginRight: 10, marginLeft: -10 }}
                   innerIconStyle={{ borderRadius: 8, borderWidth: 2, borderColor: '#fff' }}
+                  isChecked={selectedCategories.includes('cosmetics')}
                 />  
-                <View style={styles.submitButton}>
-                  <Button
-                    title="Apply"
-                    color={'#fff'}
-                    onPress={() => {}}
-                  />
-                </View>
               </View>
 
             </Animated.View>
@@ -274,6 +320,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     margin: '5%',
     gap: 25,
+    
     zIndex: 1,
   },
   shopItemFlex: {
@@ -360,16 +407,6 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     gap: 20,
-  },
-  submitButton: {
-    marginTop: 20,
-    width: 150,
-    height: 40,
-    backgroundColor: '#004168',
-    borderRadius: 15,
-    fontFamily: 'Geologica',
-    fontWeight: 'bold',
-    fontSize: 15,
   },
 });
 

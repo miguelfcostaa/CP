@@ -19,6 +19,8 @@ export default function Cart() {
         clearCart(); 
     };
 
+    const total = cart.reduce((acc, item) => acc + item.price, 0);
+
     return (
         <>
             <View style={styles.background}></View>
@@ -68,6 +70,17 @@ export default function Cart() {
                         </TouchableOpacity>
                     </View>
                 )))}
+                <View style={styles.totalFlex}>
+                    <Text style={styles.total}> Total: </Text>
+                    <View style={styles.totalContainer}>
+                        <Text style={styles.price}> {total} </Text>
+                        <Image
+                            source={require('@/assets/icons/coin-image.png')}
+                            style={styles.coinImage}
+                        />
+                    </View>
+                </View>
+
             </View>
 
             <View style={styles.buyButtonFlex}>
@@ -146,7 +159,8 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         gap: 5,
-
+        overflow: 'auto',
+        
     },
     box: {
         width: '90%',
@@ -201,6 +215,28 @@ const styles = StyleSheet.create({
         backgroundColor: '#F90A0A',
         borderRadius: 15,
         boxShadow: "2px 4px 4px rgba(0, 0, 0, 0.25)",
+    },
+    totalFlex: {
+        display: 'flex',
+        flexDirection: 'row',
+        marginTop: "auto",
+        width: "100%",
+    },
+    total: {
+        color: '#FFFFFF',
+        fontSize: 24,
+        alignSelf: 'center',
+        marginLeft: 10,
+        marginRight: 10,
+    },
+    totalContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#007BC6',
+        borderRadius: 10,
+        width: "70%",
     },
     
 });
