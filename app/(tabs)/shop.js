@@ -163,6 +163,22 @@ export default function ShopScreen() {
     ]).start(() => setDrawerOpen(false));
   };
 
+  handleReset = async () => {
+    setSelectedCategories([]);
+    try {
+      const itemsCollection = collection(db, 'shopItems');
+      const itemsSnapshot = await getDocs(itemsCollection);
+
+      const itemsList = itemsSnapshot.docs.map(doc => {
+        return { id: doc.id, ...doc.data() };
+      });
+
+      setShopItems(itemsList);
+    } catch (error) {
+      console.error("Erro ao buscar itens da loja:", error.message);
+    }
+  }
+
   return (
     <View style={styles.container}>
       {/* Fundo */}
@@ -256,6 +272,10 @@ export default function ShopScreen() {
                   isChecked={selectedCategories.includes('cosmetics')}
                 />  
               </View>
+
+              <TouchableOpacity style={styles.resetButton} onPress={() => handleReset()}>
+                <Text style={{ color : 'white', fontSize : 16 }}> Reset </Text>
+              </TouchableOpacity>
 
             </Animated.View>
           </View>
@@ -396,6 +416,15 @@ const styles = StyleSheet.create({
   },
   coinFlex: {
     marginBottom: 20,
+  },
+  resetButton: {
+    backgroundColor: '#004168',
+    padding: 10,
+    borderRadius: 20,
+    textAlign: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
   },
 });
 
