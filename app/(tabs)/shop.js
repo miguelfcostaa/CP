@@ -18,7 +18,6 @@ import { useRouter } from 'expo-router';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebaseConfig'; 
 import { useCart } from '@/contexts/CartContext';
-import { useCoin } from '@/contexts/CoinContext';
 import { query, where } from 'firebase/firestore';
 
 
@@ -28,7 +27,6 @@ export default function ShopScreen() {
   const [selectedCategories, setSelectedCategories] = useState([]);
 
   const { cartCount, setIsAdded, setCartCount, addToCart, removeFromCart, findItemInCart } = useCart();
-  const { coins } = useCoin();
   const router = useRouter();
 
   const drawerAnimation = useRef(new Animated.Value(-200)).current; 
@@ -51,8 +49,6 @@ export default function ShopScreen() {
         console.error("Erro ao buscar itens da loja:", error.message);
       }
     };
-    
-
     fetchShopItems();
 
   }, []);

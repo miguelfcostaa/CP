@@ -27,6 +27,7 @@ export default function Cart() {
         setCoins(coins - total);
         handleClearCart();
         alert('Thank you for your purchase!');
+        router.push('/shop');
     }
 
     const total = cart.reduce((acc, item) => acc + item.price, 0);
