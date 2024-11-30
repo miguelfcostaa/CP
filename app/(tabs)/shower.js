@@ -1,5 +1,6 @@
 import { StyleSheet, View, Image, PanResponder } from 'react-native';
 import React, { useState, useRef } from 'react';
+import Header from '@/components/Header';
 
 export default function ShowerScreen() {
   const [position, setPosition] = useState({ x: 0, y: 650 });
@@ -27,6 +28,10 @@ export default function ShowerScreen() {
         style={styles.backgroundImage}
       />
 
+      <View style={styles.header}>
+        <Header />
+      </View>
+
       <View style={styles.flex}>
         <Image
           source={require('@/assets/images/dirty-cat.png')}
@@ -46,8 +51,6 @@ export default function ShowerScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   backgroundImage: {
     width: '100%',
@@ -55,9 +58,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     ...StyleSheet.absoluteFillObject,
   },
+  header: {
+    margin: 10,
+  },
   flex: {
-    display: 'flex',
-    marginTop: 300,
+    alignSelf: 'center',
+    marginTop: 250,
   },
   cat: {
     width: 255,

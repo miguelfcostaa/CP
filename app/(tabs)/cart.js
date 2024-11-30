@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, Button } from 'react-n
 import { useRouter, useSearchParams } from 'expo-router';
 import { useCart } from '@/contexts/CartContext';
 import { useCoin } from '@/contexts/CoinContext';
+import CoinOverlay from '@/components/CoinOverlay';
 
 export default function Cart() {
     const router = useRouter();
@@ -46,11 +47,7 @@ export default function Cart() {
             </View>
 
             <View style={styles.coinContainer}>
-                <Image
-                    source={require('@/assets/icons/coin-overlay.png')}
-                    style={styles.coinOverlay}
-                />
-                <Text style={styles.coinText}> {coins} </Text>
+                <CoinOverlay />
             </View>
 
             <View style={styles.box}>
@@ -141,29 +138,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#0074BB',
         borderRadius: 15,
         height: 'auto',
-        width: '40%',
-        padding: 10,
+        width: '43%',
         marginLeft: '5%',
+        padding: 10,
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'center',
     },
-    coinText: {
-        fontSize: 22,
-        fontWeight: 'bold',
-        fontFamily: 'Gasoek One',	
-        color: '#fff',  
-        marginTop: 20,
-        marginBottom: 30,
-        position: 'absolute',
-        top: 2,
-        left: 70,
-    },
-    coinOverlay: {
-        width: 129,
-        height: 44,
-        marginTop: '2%',
-    },    
     flexBox: {
         display: 'flex',
         flexDirection: 'row',

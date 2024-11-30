@@ -1,5 +1,6 @@
 import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
+import Header from '@/components/Header';
 
 export default function HomeScreen() {
 
@@ -11,6 +12,10 @@ export default function HomeScreen() {
         source={require('@/assets/images/background.png')}
         style={styles.backgroundImage}
       />
+
+      <View style={styles.header}>
+        <Header />
+      </View>
 
       <View style={styles.flex}>
         <Image
@@ -26,18 +31,20 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   backgroundImage: {
     width: '100%',
     height: '100%',
     justifyContent: 'center',
+    alignItems: 'center',
     ...StyleSheet.absoluteFillObject,
   },
+  header: {
+    margin: 10,
+  },
   flex: {
-    display: 'flex',
-    marginTop: 300,
+    alignSelf: 'center',
+    marginTop: 250,
   },
   cat: {
     width: 255,

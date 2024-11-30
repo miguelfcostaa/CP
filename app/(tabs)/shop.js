@@ -13,6 +13,7 @@ import {
 import ShopItem from '@/components/ShopItem';
 import AddToCart from '@/components/AddToCart';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import CoinOverlay from '@/components/CoinOverlay';
 import { useRouter } from 'expo-router';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebaseConfig'; 
@@ -222,11 +223,9 @@ export default function ShopScreen() {
         <TouchableWithoutFeedback onPress={closeDrawer}>
           <View style={styles.overlay}>
             <Animated.View style={[styles.drawer, { right: drawerAnimation }]}>
-              <Image
-                source={require('@/assets/icons/coin-overlay.png')}
-                style={styles.coinOverlay}
-              />
-              <Text style={styles.coinText}> {coins} </Text>
+              <View style={styles.coinFlex}>
+                <CoinOverlay />
+              </View>
 
               <Text style={styles.drawerTitle}> Filters: </Text>
 
@@ -390,25 +389,13 @@ const styles = StyleSheet.create({
     color: 'red',
     fontSize: 18,
   },
-  coinText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    fontFamily: 'Gasoek One',	
-    color: '#fff',  
-    marginTop: 20,
-    position: 'absolute',
-    top: 145,
-    right: 60,
-  },
-  coinOverlay: {
-    width: 151,
-    height: 51,
-    marginBottom: 30,
-  },
   drawerItemFlex: {
     display: "flex",
     flexDirection: "column",
     gap: 20,
+  },
+  coinFlex: {
+    marginBottom: 20,
   },
 });
 
