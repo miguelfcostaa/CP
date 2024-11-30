@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-
-=======
->>>>>>> 654f7642640656dd8395161b85150ce494d1b0ad
 import { StyleSheet, View } from 'react-native';
 
 
