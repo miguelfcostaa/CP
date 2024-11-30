@@ -17,6 +17,7 @@ import { useRouter } from 'expo-router';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebaseConfig'; 
 import { useCart } from '@/contexts/CartContext';
+import { useCoin } from '@/contexts/CoinContext';
 import { query, where } from 'firebase/firestore';
 
 
@@ -25,7 +26,8 @@ export default function ShopScreen() {
   const [shopItems, setShopItems] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
 
-  const { cart, cartCount, setIsAdded, setCartCount, addToCart, removeFromCart, findItemInCart } = useCart();
+  const { cartCount, setIsAdded, setCartCount, addToCart, removeFromCart, findItemInCart } = useCart();
+  const { coins } = useCoin();
   const router = useRouter();
 
   const drawerAnimation = useRef(new Animated.Value(-200)).current; 
@@ -224,7 +226,7 @@ export default function ShopScreen() {
                 source={require('@/assets/icons/coin-overlay.png')}
                 style={styles.coinOverlay}
               />
-              <Text style={styles.coinText}> 223 </Text>
+              <Text style={styles.coinText}> {coins} </Text>
 
               <Text style={styles.drawerTitle}> Filters: </Text>
 

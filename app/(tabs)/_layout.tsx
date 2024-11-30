@@ -2,11 +2,13 @@ import { Tabs } from 'expo-router';
 import React from 'react';
 import { View, Image } from 'react-native';
 import { CartProvider } from '@/contexts/CartContext';
+import { CoinProvider } from '@/contexts/CoinContext';
 
 export default function TabLayout() {
 
   return (
     <CartProvider>
+    <CoinProvider>
     <Tabs
       screenOptions={{
         headerShown: false,
@@ -121,6 +123,7 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
+    </CoinProvider>
     </CartProvider>
   );
 }

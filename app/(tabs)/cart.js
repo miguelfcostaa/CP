@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Button } from 'react-native';
 import { useRouter, useSearchParams } from 'expo-router';
 import { useCart } from '@/contexts/CartContext';
+import { useCoin } from '@/contexts/CoinContext';
 
 export default function Cart() {
     const router = useRouter();
 
     const { cart, setIsAdded, setCartCount, removeFromCart, clearCart } = useCart();
+    const { coins, setCoins } = useCoin();
 
     const handleRemoveFromCart = (productId) => {
         removeFromCart(productId); 
@@ -16,8 +18,15 @@ export default function Cart() {
 
 
     const handleClearCart = () => {
+        setCartCount(0);
         clearCart(); 
     };
+
+    const handleBuy = (total) => {
+        setCoins(coins - total);
+        handleClearCart();
+        alert('Thank you for your purchase!');
+    }
 
     const total = cart.reduce((acc, item) => acc + item.price, 0);
 
@@ -41,7 +50,7 @@ export default function Cart() {
                     source={require('@/assets/icons/coin-overlay.png')}
                     style={styles.coinOverlay}
                 />
-                <Text style={styles.coinText}> 223 </Text>
+                <Text style={styles.coinText}> {coins} </Text>
             </View>
 
             <View style={styles.box}>
@@ -85,7 +94,7 @@ export default function Cart() {
 
             <View style={styles.buyButtonFlex}>
                 <View style={styles.buyButton}>
-                    <Button title='Buy' color={'white'} />
+                    <Button title='Buy' color={'white'} onPress={() => handleBuy(total)}/>
                 </View>
             </View>
         </>

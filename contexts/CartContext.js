@@ -7,8 +7,6 @@ export const CartProvider = ({ children }) => {
     const [cartCount, setCartCount] = useState(0);
     const [isAdded, setIsAdded] = useState(false);
 
-    
-
 
     const findItemInCart = (productId) => {
         return cart.find((item) => item.id === productId);
