@@ -1,13 +1,16 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
-import { useCoin } from '@/contexts/CoinContext';
 import CoinOverlay from '@/components/CoinOverlay';
+import { useCat } from '@/contexts/CatContext';
 
 const Header = () => {
 
-    const foodPercentage = 55;
-    const happyPercentage = 75;
-    const { coins } = useCoin();
+    const { happiness, hungry } = useCat();
+
+    const foodPercentage = hungry;
+    const happyPercentage = happiness;
+
+
     return (
         <>
             <View style={styles.container}>
