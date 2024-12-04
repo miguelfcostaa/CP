@@ -1,28 +1,19 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     StyleSheet,
     View,
     Text,
     Image,
     TouchableOpacity,
-    Animated,
-    TouchableWithoutFeedback,
-    Button,
-    ScrollView
 } from 'react-native';
-import ShopItem from '@/components/ShopItem';
-import AddToCart from '@/components/AddToCart';
-import BouncyCheckbox from "react-native-bouncy-checkbox";
-import CoinOverlay from '@/components/CoinOverlay';
 import { useRouter } from 'expo-router';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebaseConfig';
-import { useCart } from '@/contexts/CartContext';
 import { where, query } from 'firebase/firestore';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import CustomItem from '@/components/CustomItem';
 
 export default function Customization() {
-
     const router = useRouter();
     const [itemsSkin, setItemsSkin] = useState([]);
     const [itemsClothing, setItemsClothing] = useState([]);
@@ -42,7 +33,6 @@ export default function Customization() {
                         return { id: doc.id, ...doc.data() };
                     });
                     setItemsSkin(item);
-                    console.log(item)
                 }
 
                 queryRef = query(itemsCollection, where("category", "==", "clothing"))
@@ -75,7 +65,7 @@ export default function Customization() {
                     const item = itemsSnapshot.docs.map(doc => {
                         return { id: doc.id, ...doc.data() };
                     });
-                    setItemsClothing(item);
+                    setItemsGlasses(item);
                 }
 
             } catch (error) {
@@ -86,11 +76,19 @@ export default function Customization() {
 
     }, []);
 
-    const log = (info) =>{
+    const updateColor = async (color) => {
+        try {
+            await AsyncStorage.setItem('catColor', color);
+        } catch (error) {
+            console.error('Error saving data', error);
+        }
+        log(color)
+    };
+
+    const log = (info) => {
         console.log(info)
     }
 
-const white = "white";
     return (
         <View style={styles.background}>
             <>
@@ -108,11 +106,52 @@ const white = "white";
 
                 {/* Categories */}
                 <View style={styles.container}>
+                    {/* Skin */}
+                    <Text style={styles.categoryTitle}>Skin</Text>
                     <View style={styles.category}>
                         {itemsSkin.map((item) => {
                             return (
-                                <View style={[{ backgroundColor: item.name }, styles.color]}>
-                                </View>
+                                <TouchableOpacity
+                                    style={[{ backgroundColor: item.name }, styles.color]}
+                                    onPress={() => updateColor(item.name)}>
+
+                                </TouchableOpacity>
+                            )
+                        })}
+                    </View>
+
+                    {/* Clothing */}
+                    <Text style={styles.categoryTitle}>Clothing</Text>
+                    <View style={styles.category}>
+                        {itemsClothing.map((item) => {
+                            return ( 
+                                <TouchableOpacity>
+                                    <CustomItem image={item.name}></CustomItem>
+                                </TouchableOpacity>
+                            )
+                        })}
+                    </View>
+
+                    {/* Ties */}
+                    <Text style={styles.categoryTitle}>Ties</Text>
+                    <View style={styles.category}>
+                        {itemsTies.map((item) => {
+                            return (
+                                <TouchableOpacity>
+                                    <CustomItem image={item.name}></CustomItem>
+                                </TouchableOpacity>
+                            )
+                        })}
+                    </View>
+
+                    {/* Glasses */}
+                    <Text style={styles.categoryTitle}>Glasses</Text>
+                    <View style={styles.category}>
+                        {itemsGlasses.map((item) => {
+                            return (
+                                <TouchableOpacity>
+                                    <CustomItem image={item.name}></CustomItem>
+                                </TouchableOpacity>
                             )
                         })}
                     </View>
@@ -155,28 +194,42 @@ const styles = StyleSheet.create({
         marginTop: '15%',
     },
     container: {
-        padding: 5,
-        marginTop: 30,
         display: 'flex',
         flexDirection: 'row',
+        flexWrap: 'wrap',
         justifyContent: 'center',
+        margin: '5%',
+        zIndex: 1,
     },
     category: {
         backgroundColor: "#FFFFFF",
         borderRadius: 20,
-        height: 50,
+        padding: 5,
+        height: "auto",
         width: "75%",
-        justifyContent: 'center',
-        display: 'flex',
-        flexDirection: 'row',
-        position: "absolute",
-        padding:10
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        marginBottom: 25,
     },
     color: {
         height: 30,
         width: 30,
         marginLeft: 10,
         borderWidth: 1.5,
-        borderRadius:"100%",
+        borderRadius: "100%",
+    },
+    categoryTitle: {
+        color: '#FFFFFF',
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign: 'left',
+        width: "75%",
+    }, 
+    itemImage:{
+        height: 50,
+        width:50,
+        marginLeft: 10,
+        borderWidth:1.5
     }
 });
