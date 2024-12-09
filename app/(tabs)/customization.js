@@ -11,13 +11,13 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebaseConfig';
 import { where, query } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import CustomItem from '@/components/CustomItem';
+import { CustomItem, imageMap } from '@/components/CustomItem';
 
 export default function Customization() {
     const router = useRouter();
     const [itemsSkin, setItemsSkin] = useState([]);
     const [itemsClothing, setItemsClothing] = useState([]);
-    const [itemsTies, setItemsTies] = useState([]);
+    const [itemsBow, setItemsBow] = useState([]);
     const [itemsGlasses, setItemsGlasses] = useState([]);
 
     useEffect(() => {
@@ -46,15 +46,15 @@ export default function Customization() {
                     setItemsClothing(item);
                 }
 
-                queryRef = query(itemsCollection, where("category", "==", "ties"))
+                queryRef = query(itemsCollection, where("category", "==", "bow"))
                 itemsSnapshot = await getDocs(queryRef);
                 if (itemsSnapshot.empty) {
-                    console.log("Não há items da categoria 'ties'.");
+                    console.log("Não há items da categoria 'bow'.");
                 } else {
                     const item = itemsSnapshot.docs.map(doc => {
                         return { id: doc.id, ...doc.data() };
                     });
-                    setItemsTies(item);
+                    setItemsBow(item);
                 }
 
                 queryRef = query(itemsCollection, where("category", "==", "glasses"))
@@ -76,13 +76,20 @@ export default function Customization() {
 
     }, []);
 
-    const updateColor = async (color) => {
+
+    const update = async (itemName, itemStored) => {
         try {
-            await AsyncStorage.setItem('catColor', color);
+            const current = await AsyncStorage.getItem(itemStored)
+            if (itemName !== current && itemName) {
+                await AsyncStorage.setItem(itemStored, itemName);
+            }
+            else if (itemStored !== "catColor") {
+                await AsyncStorage.removeItem(itemStored)
+            }
+            //await AsyncStorage.setItem(itemStored, itemName);
         } catch (error) {
             console.error('Error saving data', error);
         }
-        log(color)
     };
 
     const log = (info) => {
@@ -112,9 +119,13 @@ export default function Customization() {
                         {itemsSkin.map((item) => {
                             return (
                                 <TouchableOpacity
+                                    key={item.id}
                                     style={[{ backgroundColor: item.name }, styles.color]}
-                                    onPress={() => updateColor(item.name)}>
-
+                                    onPress={() => update(item.name, "catColor")}>
+                                    <Image
+                                        source={imageMap[item.name]}
+                                        style={styles.clothing}
+                                    />
                                 </TouchableOpacity>
                             )
                         })}
@@ -124,21 +135,31 @@ export default function Customization() {
                     <Text style={styles.categoryTitle}>Clothing</Text>
                     <View style={styles.category}>
                         {itemsClothing.map((item) => {
-                            return ( 
-                                <TouchableOpacity>
-                                    <CustomItem image={item.name}></CustomItem>
+                            return (
+                                <TouchableOpacity
+                                    key={item.id}
+                                    onPress={() => update(item.name, "catClothing")}>
+                                    <Image
+                                        source={imageMap[item.name]}
+                                        style={styles.clothing}
+                                    />
                                 </TouchableOpacity>
                             )
                         })}
                     </View>
 
-                    {/* Ties */}
-                    <Text style={styles.categoryTitle}>Ties</Text>
+                    {/* Bows */}
+                    <Text style={styles.categoryTitle}>Bows</Text>
                     <View style={styles.category}>
-                        {itemsTies.map((item) => {
+                        {itemsBow.map((item) => {
                             return (
-                                <TouchableOpacity>
-                                    <CustomItem image={item.name}></CustomItem>
+                                <TouchableOpacity
+                                    key={item.id}
+                                    onPress={() => update(item.name, "catBow")}>
+                                    <Image
+                                        source={imageMap[item.name]}
+                                        style={styles.bow}
+                                    />
                                 </TouchableOpacity>
                             )
                         })}
@@ -149,8 +170,13 @@ export default function Customization() {
                     <View style={styles.category}>
                         {itemsGlasses.map((item) => {
                             return (
-                                <TouchableOpacity>
-                                    <CustomItem image={item.name}></CustomItem>
+                                <TouchableOpacity
+                                    key={item.id}
+                                    onPress={() => update(item.name, "catGlasses")}>
+                                    <Image
+                                        source={imageMap[item.name]}
+                                        style={styles.bow}
+                                    />
                                 </TouchableOpacity>
                             )
                         })}
@@ -213,8 +239,8 @@ const styles = StyleSheet.create({
         marginBottom: 25,
     },
     color: {
-        height: 30,
-        width: 30,
+        height: 40,
+        width: 40,
         marginLeft: 10,
         borderWidth: 1.5,
         borderRadius: "100%",
@@ -225,11 +251,16 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'left',
         width: "75%",
-    }, 
-    itemImage:{
-        height: 50,
-        width:50,
-        marginLeft: 10,
-        borderWidth:1.5
+    },
+    clothing: {
+        height: 43,
+        width: 77,
+        margin: 5,
+    },
+    bow: {
+        height: 75,
+        width: 75,
+        margin: 5,
     }
+
 });
