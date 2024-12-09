@@ -99,7 +99,10 @@ export default function Customization() {
     return (
         <View style={styles.background}>
             <>
-
+                <Image
+                    source={require('@/assets/images/background-customization.png')}
+                    style={styles.backgroundImage}
+                />
                 {/* Header */}
                 <View style={styles.header}>
                     <TouchableOpacity onPress={() => router.push('/home')} >
@@ -188,6 +191,13 @@ export default function Customization() {
 }
 
 const styles = StyleSheet.create({
+    backgroundImage: {
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        ...StyleSheet.absoluteFillObject,
+      },
     background: {
         height: '100%',
         width: '100%',
