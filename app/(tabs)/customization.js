@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
         width: "75%",
     },
     clothing: {
-        height: 43,
+        height: 33,
         width: 77,
         margin: 5,
     },

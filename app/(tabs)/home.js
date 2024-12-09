@@ -112,11 +112,11 @@ const styles = StyleSheet.create({
     height: 262,
   },
   clothing: {
-    width: 200,
-    height: 80,
+    width: 150,
+    height: 60,
     position: "absolute",
-    left: "6%",
-    top: "55%"
+    left: "13%",
+    top: "64%"
   },
   bow: {
     width: 50,
