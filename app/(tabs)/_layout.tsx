@@ -117,14 +117,14 @@ export default function TabLayout() {
             if (focused) {
               return (
                 <Image
-                  source={require('@/assets/icons/friends_button_focused.png')}
+                  source={require('@/assets/icons/customization_button_focused.png')}
                   style={styles.icon}
                 />
               );
             } else {
               return (
                 <Image
-                  source={require('@/assets/icons/friends_button.png')}
+                  source={require('@/assets/icons/customization_button.png')}
                   style={styles.icon}
                 />
               );
