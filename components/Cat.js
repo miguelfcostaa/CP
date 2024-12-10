@@ -7,13 +7,7 @@ const imageMap = {
     "normal-cat": require('@/assets/images/normal-cat.png'),
     "sad-cat": require('@/assets/images/sad-cat.png'),
     "dirty-cat": require('@/assets/images/dirty-cat.png'),
-    "cat-eating": require('@/assets/gifs/cat-eating.gif'),
     "very-happy-cat": require('@/assets/images/very-happy-cat.png'),   
-    "cat-happy-1": require('@/assets/gifs/cat-happy-1.png'),
-    "cat-happy-2": require('@/assets/gifs/cat-happy-2.png'),
-    "cat-happy-3": require('@/assets/gifs/cat-happy-3.png'),
-    "cat-happy-4": require('@/assets/gifs/cat-happy-4.png'),
-    "cat-happy-5": require('@/assets/gifs/cat-happy-5.png'), 
 };
 
 const Cat = () => {
