@@ -5,7 +5,7 @@ const CatContext = createContext();
 export const CatProvider = ({ children }) => {
     const [happiness, setHappiness] = useState(0);
     const [hungry, setHungry] = useState(0);
-    const [dirty, setDirty] = useState(false);
+    const [isDirty, setIsDirty] = useState(true);
     const [isEating, setIsEating] = useState(false);
 
     if (hungry > 100) {
@@ -17,7 +17,7 @@ export const CatProvider = ({ children }) => {
     }
 
     return (
-        <CatContext.Provider value={{ happiness, setHappiness, hungry, setHungry, dirty, setDirty, isEating, setIsEating }}>
+        <CatContext.Provider value={{ happiness, setHappiness, hungry, setHungry, isDirty, setIsDirty, isEating, setIsEating }}>
             {children}
         </CatContext.Provider>
     );

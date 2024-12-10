@@ -14,48 +14,55 @@ const imageMap = {
     "cat-happy-3": require('@/assets/gifs/cat-happy-3.png'),
     "cat-happy-4": require('@/assets/gifs/cat-happy-4.png'),
     "cat-happy-5": require('@/assets/gifs/cat-happy-5.png'), 
+    "dirty-cat-eating": require('@/assets/gifs/dirty-cat-eating.gif'),
 };
 
 const Cat = () => {
-    const { happiness, dirty, isEating } = useCat();
+    const { happiness, isDirty, isEating } = useCat();
     const [displayImage, setDisplayImage] = useState("");
 
     useEffect(() => {
-        if (happiness >= 100) {
-            const frames = [
-                "cat-happy-1",
-                "cat-happy-2",
-                "cat-happy-3",
-                "cat-happy-4",
-                "cat-happy-5",
-                "very-happy-cat",
-            ];
-            
-            let frameIndex = 0;
-            const interval = setInterval(() => {
-                setDisplayImage(frames[frameIndex]);
-                frameIndex++;
-                if (frameIndex === frames.length) {
-                    clearInterval(interval);
-                }
-            }, 500);
-
-            return () => clearInterval(interval);
-        } 
-        else if (happiness >= 75) {
-            setDisplayImage("happy-cat");
-        } 
-        else if (happiness >= 50) {
-            setDisplayImage("normal-cat");
-        } 
+        if (isDirty && isEating) { setDisplayImage("dirty-cat-eating"); }
+        else if (isDirty) { setDisplayImage("dirty-cat"); }
+        else if (isEating) { setDisplayImage("cat-eating"); }
         else {
-            setDisplayImage("sad-cat");
+            if (happiness >= 100) {
+                const frames = [
+                    "cat-happy-1",
+                    "cat-happy-2",
+                    "cat-happy-3",
+                    "cat-happy-4",
+                    "cat-happy-5",
+                    "very-happy-cat",
+                ];
+                
+                let frameIndex = 0;
+                const interval = setInterval(() => {
+                    setDisplayImage(frames[frameIndex]);
+                    frameIndex++;
+                    if (frameIndex === frames.length) {
+                        clearInterval(interval);
+                    }
+                }, 500);
+    
+                return () => clearInterval(interval);
+            } 
+            else if (happiness >= 75) {
+                setDisplayImage("happy-cat");
+            } 
+            else if (happiness >= 50) {
+                setDisplayImage("normal-cat");
+            } 
+            else {
+                setDisplayImage("sad-cat");
+            }
         }
+        
 
-        if (isEating) { setDisplayImage("cat-eating"); }
-        if (dirty) { setDisplayImage("dirty-cat"); }
+        
+        
 
-    }, [happiness, dirty, isEating]); 
+    }, [happiness, isDirty, isEating]); 
 
     return (
         <View style={styles.container}>
