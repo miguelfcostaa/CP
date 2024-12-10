@@ -7,6 +7,7 @@ const imageMap = {
     "cat-bed": require('@/assets/images/cat-bed.png'),
     "cat-bed-deluxe": require('@/assets/images/cat-bed-deluxe.png'),
     "red-shirt-cat": require('@/assets/images/red-shirt-cat.png'),
+    "fish" : require('@/assets/images/fish.png'),
 };
 
 const ShopItem = ({ image, name, price }) => {
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'white',
-        height: 227,
+        height: 240,
         width: 160,
         borderRadius: 10,
     },
@@ -67,14 +68,13 @@ const styles = StyleSheet.create({
     price: {
         font: 'Geologica',
         color: '#FFD700',
-
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 16,
     },
     coinImage: {
-        width: 37,
-        height: 37,
+        width: 34,
+        height: 34,
         marginBottom: 16,
     },
 });

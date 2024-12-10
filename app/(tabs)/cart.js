@@ -1,16 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Button } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Button, ScrollView } from 'react-native';
 import { useRouter, useSearchParams } from 'expo-router';
 import { useCart } from '@/contexts/CartContext';
 import { useCoin } from '@/contexts/CoinContext';
 import CoinOverlay from '@/components/CoinOverlay';
+import { Dropdown } from 'react-native-element-dropdown';
+import { useFish } from '@/contexts/FishContext';
+
 
 export default function Cart() {
     const router = useRouter();
 
-    const { cart, setIsAdded, setCartCount, removeFromCart, clearCart } = useCart();
+    const { cart, setIsAdded, setCartCount, removeFromCart, clearCart, findItemByName } = useCart();
     const { coins, setCoins } = useCoin();
+    const { fish, setFish } = useFish();
+    const [quantities, setQuantities] = useState({});
+    const [dropdownOpen, setDropdownOpen] = useState(null);
 
+    const handleQuantityChange = (productId, value) => {
+        setQuantities((prev) => ({
+            ...prev,
+            [productId]: parseInt(value, 10),
+        }));
+    };
     const handleRemoveFromCart = (productId) => {
         removeFromCart(productId); 
         setCartCount((prevCount) => prevCount - 1); 
@@ -25,12 +37,17 @@ export default function Cart() {
 
     const handleBuy = (total) => {
         setCoins(coins - total);
+        const fishItem = findItemByName('Fish'); 
+        if (fishItem) {
+            const quantity = quantities[fishItem.id] || 1;  
+            setFish(prevFish => prevFish + quantity); 
+        }
         handleClearCart();
         alert('Thank you for your purchase!');
         router.push('/shop');
     }
 
-    const total = cart.reduce((acc, item) => acc + item.price, 0);
+    const total = cart.reduce((acc, item) => acc + item.price * (quantities[item.id] || 1), 0);
 
     return (
         <>
@@ -52,13 +69,36 @@ export default function Cart() {
             </View>
 
             <View style={styles.box}>
+                <ScrollView>
                 {cart.length === 0 ? (
-                        <View style={styles.inputContainer}>
-                            <Text style={styles.name}>Your cart is empty.</Text>
-                        </View>
+                    <View style={styles.inputContainer}>
+                        <Text style={styles.name}>Your cart is empty.</Text>
+                    </View>
                 ) : 
                 (cart.map((item, index) => (
+                    
                     <View style={styles.flexBox} key={index}>
+                        <View style={styles.inputContainer}>
+                            <Dropdown
+                                data={[...Array(10).keys()].map((i) => ({
+                                    label: `${i + 1}`,
+                                    value: i + 1,
+                                }))}
+                                labelField="label"
+                                valueField="value"
+                                value={quantities[item.id] || '1'}
+                                onChange={(value) => handleQuantityChange(item.id, value.value)}
+                                style={styles.dropdown}
+                                placeholder="1"
+                                maxHeight={150}
+                                containerStyle={styles.dropdownContainer}
+                                iconColor='#fff'
+                                placeholderStyle={{ color: '#FFFFFF' }} 
+                                itemTextStyle={{ color: '#000' }}
+                                selectedTextStyle={{ color: '#FFFFFF' }}
+                                font
+                            />
+                        </View>
                         <View style={styles.inputContainer} >
                             <Text style={styles.name}> {item.name} </Text>
                         </View>
@@ -76,7 +116,9 @@ export default function Cart() {
                             />
                         </TouchableOpacity>
                     </View>
+                    
                 )))}
+                </ScrollView>
                 <View style={styles.totalFlex}>
                     <Text style={styles.total}> Total: </Text>
                     <View style={styles.totalContainer}>
@@ -148,9 +190,8 @@ const styles = StyleSheet.create({
     flexBox: {
         display: 'flex',
         flexDirection: 'row',
+        flexWrap: 'wrap',
         gap: 5,
-        overflow: 'auto',
-        
     },
     box: {
         width: '90%',
@@ -179,8 +220,8 @@ const styles = StyleSheet.create({
         fontSize: 24,
     },
     coinImage: {
-        width: 39,
-        height: 39,
+        width: 32,
+        height: 32,
         alignSelf: 'center',
     },
     removeContainer: {
@@ -211,6 +252,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginTop: "auto",
         width: "100%",
+        height: 40,
     },
     total: {
         color: '#FFFFFF',
@@ -228,5 +270,19 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: "70%",
     },
-    
+    dropdown: {
+        height: 30,
+        width: 40,
+        paddingLeft: 2,
+        backgroundColor: '#007BC6',
+    },
+    dropdownContainer: {
+        borderColor: '#007BC6',
+        backgroundColor: '#fff',
+        borderRadius: 8,
+        width: 60,
+        height: 150,
+        marginLeft: -10,
+        marginTop: 10,
+    },
 });

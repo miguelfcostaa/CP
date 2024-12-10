@@ -4,6 +4,7 @@ import { View, Image } from 'react-native';
 import { CartProvider } from '@/contexts/CartContext';
 import { CoinProvider } from '@/contexts/CoinContext';
 import { CatProvider } from '@/contexts/CatContext';
+import { FishProvider } from '@/contexts/FishContext';
 
 export default function TabLayout() {
 
@@ -11,6 +12,7 @@ export default function TabLayout() {
     <CartProvider>
     <CoinProvider>
     <CatProvider>
+    <FishProvider>
     <Tabs
       screenOptions={{
         headerShown: false,
@@ -65,7 +67,7 @@ export default function TabLayout() {
           },
         }}
       />
-      <Tabs.Screen
+      {/*<Tabs.Screen
         name="friends"
         options={{
           title: '',
@@ -88,7 +90,7 @@ export default function TabLayout() {
           },
         }}
       />
-      <Tabs.Screen
+       <Tabs.Screen
         name="shower"
         options={{
           title: '',
@@ -110,7 +112,8 @@ export default function TabLayout() {
             }
           },
         }}
-      />
+      /> */}
+
       <Tabs.Screen
         name="cart"
         options={{
@@ -125,6 +128,7 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
+    </FishProvider>
     </CatProvider>
     </CoinProvider>
     </CartProvider>

@@ -3,14 +3,16 @@ import { Image, StyleSheet, View, Dimensions, TouchableOpacity, Text } from 'rea
 import Header from '@/components/Header';
 import Cat from '@/components/Cat';
 import { useCat } from '@/contexts/CatContext';
+import { useFish } from '@/contexts/FishContext';
 
 const { width, height } = Dimensions.get('window');
 
 export default function HomeScreen() {
   const { happiness, setHappiness, hungry, setHungry, isEating, setIsEating } = useCat();
+  const { fish, setFish } = useFish();
 
   const handleEating = () => {
-    
+    setFish(fish - 1);
     setIsEating(true);
     setTimeout(() => {
       setIsEating(false);
@@ -31,7 +33,7 @@ export default function HomeScreen() {
         <Header />
       </View>
 
-      { !isEating ? (
+      { !isEating && fish > 0 ? (
         <>
           <Cat />
           <TouchableOpacity onPress={() => handleEating()}>
@@ -40,7 +42,7 @@ export default function HomeScreen() {
               style={styles.fish}
             /> 
           </TouchableOpacity>
-          <Text style={styles.numberFish}> x3 </Text>
+          <Text style={styles.numberFish}> x{fish} </Text>
         </>
 
       ) : (
@@ -52,7 +54,7 @@ export default function HomeScreen() {
               style={[styles.fish, { opacity: 0.5 }]}
             /> 
           </TouchableOpacity>
-          <Text style={styles.numberFish}> x3 </Text>
+          <Text style={styles.numberFish}> x{fish} </Text>
         </>
       )}
 
