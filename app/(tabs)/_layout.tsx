@@ -67,30 +67,7 @@ export default function TabLayout() {
           },
         }}
       />
-      {/*<Tabs.Screen
-        name="friends"
-        options={{
-          title: '',
-          tabBarIcon: ({ color, focused }) => {
-            if (focused) {
-              return (
-                <Image
-                  source={require('@/assets/icons/friends_button_focused.png')}
-                  style={styles.icon}
-                />
-              );
-            } else {
-              return (
-                <Image
-                  source={require('@/assets/icons/friends_button.png')}
-                  style={styles.icon}
-                />
-              );
-            }
-          },
-        }}
-      />
-       <Tabs.Screen
+      <Tabs.Screen
         name="shower"
         options={{
           title: '',
@@ -112,7 +89,7 @@ export default function TabLayout() {
             }
           },
         }}
-      /> */}
+      />
 
       <Tabs.Screen
         name="cart"
