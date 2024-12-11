@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 
-export const imageMap = {
+export const imageClothesMap = {
     "GreenShirt": require('@/assets/images/Customization/Green_Shirt.png'),
     "BlueShirt": require('@/assets/images/Customization/Blue_Shirt.png'),
     "RedShirt": require('@/assets/images/Customization/Red_Shirt.png'),

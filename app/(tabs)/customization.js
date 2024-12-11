@@ -12,7 +12,7 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebaseConfig';
 import { where, query } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { CustomItem, imageMap } from '@/components/CustomItem';
+import { CustomItem, imageClothesMap } from '@/components/CustomItem';
 import { useCat } from '@/contexts/CatContext';
 
 export default function Customization() {
@@ -170,7 +170,7 @@ export default function Customization() {
                                     style={[{ backgroundColor: item.name }, styles.color]}
                                     onPress={() => update(item.name, "catColor")}>
                                     <Image
-                                        source={imageMap[item.name]}
+                                        source={imageClothesMap[item.name]}
                                         style={styles.clothing}
                                     />
                                 </TouchableOpacity>
@@ -192,7 +192,7 @@ export default function Customization() {
                                             disabled={itemsLocked.some((lockedItem) => lockedItem.name === item.name)}
                                         >
                                             <Image
-                                                source={imageMap[item.name]}
+                                                source={imageClothesMap[item.name]}
                                                 style={styles.clothing}
                                             />
                                         </TouchableOpacity>
@@ -223,7 +223,7 @@ export default function Customization() {
                                             disabled={itemsLocked.some((lockedItem) => lockedItem.name === item.name)}
                                         >
                                             <Image
-                                                source={imageMap[item.name]}
+                                                source={imageClothesMap[item.name]}
                                                 style={styles.bow}
                                             />
                                         </TouchableOpacity>
@@ -254,7 +254,7 @@ export default function Customization() {
                                             disabled={itemsLocked.some((lockedItem) => lockedItem.name === item.name)}
                                         >
                                             <Image
-                                                source={imageMap[item.name]}
+                                                source={imageClothesMap[item.name]}
                                                 style={styles.bow}
                                             />
                                         </TouchableOpacity>

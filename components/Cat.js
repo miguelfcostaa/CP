@@ -3,6 +3,7 @@ import { View, Image, StyleSheet } from 'react-native';
 import { useCat } from '@/contexts/CatContext';
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CustomItem, imageClothesMap } from '@/components/CustomItem';
 
 const imageMap = {
     "happy-cat": require('@/assets/images/happy-cat.png'),
@@ -109,6 +110,27 @@ const Cat = () => {
                 source={require('@/assets/images/sofa.png')}
                 style={styles.sofa}
             />
+
+            {/* clothing */}
+        {clothing && (
+          <Image
+            source={imageClothesMap[clothing]}
+            style={styles.clothing}
+          />
+        )}
+        {/* bow */}
+        {bow && (
+          <Image
+            source={imageClothesMap[bow]}
+            style={styles.bow}
+          />
+        )}
+        {glasses && (
+          <Image
+            source={imageClothesMap[glasses]}
+            style={styles.glasses}
+          />
+        )}
         </View>
     );
 };
@@ -132,7 +154,29 @@ const styles = StyleSheet.create({
         bottom: 60,
         zIndex: 0,
     },
-
+    clothing: {
+        width: 150,
+        height: 60,
+        position: "absolute",
+        bottom: 113,
+        left: 139,
+        zIndex: 1,
+      },
+      bow: {
+        width: 50,
+        height: 50,
+        position: "absolute",
+        zIndex: 1,
+        bottom: 250,
+      },
+      glasses: {
+        width: 190,
+        height: 150,
+        position: "absolute",
+        zIndex: 1,
+        bottom: 150,
+        left: 120,
+      },
 });
 
 export default Cat;
