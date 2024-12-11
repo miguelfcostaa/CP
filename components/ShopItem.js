@@ -7,7 +7,6 @@ const imageMap = {
     "cat-bed": require('@/assets/images/cat-bed.png'),
     "cat-bed-deluxe": require('@/assets/images/cat-bed-deluxe.png'),
     "red-shirt-cat": require('@/assets/images/red-shirt-cat.png'),
-
     "Green_Shirt.png": require('@/assets/images/green-shirt-cat.png'),
     "Blue_Shirt.png": require('@/assets/images/blue-shirt-cat.png'),
     "Red_Shirt.png": require('@/assets/images/red-shirt-cat.png'),
@@ -17,6 +16,7 @@ const imageMap = {
     "Round_Glasses.png": require('@/assets/images/Customization/Round_Glasses.png'),
     "Black_Sunglasses.png": require('@/assets/images/Customization/Black_Sunglasses.png'),
     "Yellow_Sunglasses.png": require('@/assets/images/Customization/Yellow_Sunglasses.png'),
+    "fish" : require('@/assets/images/fish.png'),
 };
 
 const ShopItem = ({ image, name, price }) => {
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'white',
-        height: 227,
+        height: 240,
         width: 160,
         borderRadius: 10,
     },
@@ -77,14 +77,13 @@ const styles = StyleSheet.create({
     price: {
         font: 'Geologica',
         color: '#FFD700',
-
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 16,
     },
     coinImage: {
-        width: 37,
-        height: 37,
+        width: 34,
+        height: 34,
         marginBottom: 16,
     },
 });

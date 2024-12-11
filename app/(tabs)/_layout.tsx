@@ -3,12 +3,16 @@ import React from 'react';
 import { View, Image } from 'react-native';
 import { CartProvider } from '@/contexts/CartContext';
 import { CoinProvider } from '@/contexts/CoinContext';
+import { CatProvider } from '@/contexts/CatContext';
+import { FishProvider } from '@/contexts/FishContext';
 
 export default function TabLayout() {
 
   return (
     <CartProvider>
     <CoinProvider>
+    <CatProvider>
+    <FishProvider>
     <Tabs
       screenOptions={{
         headerShown: false,
@@ -64,29 +68,6 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="friends"
-        options={{
-          title: '',
-          tabBarIcon: ({ color, focused }) => {
-            if (focused) {
-              return (
-                <Image
-                  source={require('@/assets/icons/friends_button_focused.png')}
-                  style={styles.icon}
-                />
-              );
-            } else {
-              return (
-                <Image
-                  source={require('@/assets/icons/friends_button.png')}
-                  style={styles.icon}
-                />
-              );
-            }
-          },
-        }}
-      />
-      <Tabs.Screen
         name="shower"
         options={{
           title: '',
@@ -109,6 +90,7 @@ export default function TabLayout() {
           },
         }}
       />
+
       <Tabs.Screen
         name="customization"
         options={{
@@ -146,6 +128,8 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
+    </FishProvider>
+    </CatProvider>
     </CoinProvider>
     </CartProvider>
   );

@@ -200,9 +200,7 @@ export default function ShopScreen() {
       console.error("Erro ao buscar itens da loja:", error.message);
     }
   }
-  const log = (info) => {
-    console.log(info)
-  }
+  
   return (
     <View style={styles.container}>
       {/* Fundo */}

@@ -1,13 +1,16 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
-import { useCoin } from '@/contexts/CoinContext';
 import CoinOverlay from '@/components/CoinOverlay';
+import { useCat } from '@/contexts/CatContext';
 
 const Header = () => {
 
-    const foodPercentage = 55;
-    const happyPercentage = 75;
-    const { coins } = useCoin();
+    const { happiness, hungry } = useCat();
+
+    const foodPercentage = hungry;
+    const happyPercentage = happiness;
+
+
     return (
         <>
             <View style={styles.container}>
@@ -96,7 +99,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         alignSelf: 'center',
         borderWidth: 2,
-        borderRadius: 20,
+        borderRadius: 21,
         borderColor: '#AD5100',
         position: 'absolute',
         left: 25,
@@ -106,7 +109,7 @@ const styles = StyleSheet.create({
     happyProgressBox: {
         height: 40,
         backgroundColor: '#F67300',
-        borderRadius: 20,
+        borderRadius: 19,
         position: 'absolute',
         alignSelf: 'flex-start',
         zIndex: 1,
@@ -128,7 +131,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         alignSelf: 'center',
         borderWidth: 2,
-        borderRadius: 20,
+        borderRadius: 21,
         borderColor: '#00A75C',
         position: 'absolute',
         left: 25,
@@ -138,11 +141,12 @@ const styles = StyleSheet.create({
     foodProgressBox: {
         height: 40,
         backgroundColor: '#2DDA8C',
-        borderRadius: 20,
+        borderRadius: 19,
         position: 'absolute',
         alignSelf: 'flex-start',
         zIndex: 1,
     },
 });
+
 
 export default Header;

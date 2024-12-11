@@ -12,6 +12,10 @@ export const CartProvider = ({ children }) => {
         return cart.find((item) => item.id === productId);
     };
 
+    const findItemByName = (name) => {
+        return cart.find((item) => item.name === name);
+    };
+
     const addToCart = (item) => {
         setCart((prevCart) => {
             const itemInCart = prevCart.find((cartItem) => cartItem.id === item.id);
@@ -35,7 +39,7 @@ export const CartProvider = ({ children }) => {
     };
 
     return (
-        <CartContext.Provider value={{ setCart, cart, isAdded, setIsAdded, cartCount, setCartCount, addToCart, removeFromCart, clearCart, findItemInCart }}>
+        <CartContext.Provider value={{ setCart, cart, isAdded, setIsAdded, cartCount, setCartCount, addToCart, removeFromCart, clearCart, findItemInCart, findItemByName }}>
             {children}
         </CartContext.Provider>
     );
