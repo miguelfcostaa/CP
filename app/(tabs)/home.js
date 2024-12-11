@@ -1,6 +1,9 @@
-import React from 'react';
-import { Image, StyleSheet, View, Dimensions, TouchableOpacity, Text } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
+import { CustomItem, imageMap } from '@/components/CustomItem';
+import { Image, StyleSheet, View, Dimensions, TouchableOpacity, Text } from 'react-native';
 import Cat from '@/components/Cat';
 import { useCat } from '@/contexts/CatContext';
 import { useFish } from '@/contexts/FishContext';
@@ -10,6 +13,40 @@ const { width, height } = Dimensions.get('window');
 export default function HomeScreen() {
   const { happiness, setHappiness, hungry, setHungry, isEating, setIsEating } = useCat();
   const { fish, setFish } = useFish();
+
+  const [color, setColor] = useState()
+  const [clothing, setClothing] = useState()
+  const [bow, setBow] = useState()
+  const [glasses, setGlasses] = useState()
+  const [locked, setLocked] = useState([])
+
+
+  const catCustomizaton = async () => {
+    try {
+      
+      const current = await AsyncStorage.getItem('catColor')
+      if (current === null) setColor("white")
+      else setColor(current)
+      setClothing(await AsyncStorage.getItem('catClothing'))
+      setBow(await AsyncStorage.getItem('catBow'))
+      setGlasses(await AsyncStorage.getItem('catGlasses'))
+      //await AsyncStorage.setItem('lockedClothes', [])
+      setLocked(JSON.parse(await AsyncStorage.getItem('lockedClothes')))
+    } catch (error) {
+      console.error('Error retrieving data', error);
+    }
+  };
+
+  const log = (info) => {
+    console.log(info)
+}
+
+  useFocusEffect(
+    React.useCallback(() => {
+      catCustomizaton()
+      log("log " + locked.map(item => item.name));
+    }, []) // Runs every time the screen gains focus
+  );
 
   const handleEating = () => {
     setFish(fish - 1);
@@ -31,6 +68,48 @@ export default function HomeScreen() {
 
       <View style={styles.header}>
         <Header />
+      </View>
+
+      <View style={styles.flex}>
+        {/* color */}
+        {color == "white" && (
+          <Image
+            source={require('@/assets/images/cat-white.png')}
+            style={styles.cat}
+          />
+        )}
+        {color == "brown" && (
+          <Image
+            source={require('@/assets/images/cat-brown.png')}
+            style={styles.cat}
+          />
+        )}
+        {color == "orange" && (
+          <Image
+            source={require('@/assets/images/cat-orange.png')}
+            style={styles.cat}
+          />
+        )}
+        {/* clothing */}
+        {clothing && (
+          <Image
+            source={imageMap[clothing]}
+            style={styles.clothing}
+          />
+        )}
+        {/* bow */}
+        {bow && (
+          <Image
+            source={imageMap[bow]}
+            style={styles.bow}
+          />
+        )}
+        {glasses && (
+          <Image
+            source={imageMap[glasses]}
+            style={styles.glasses}
+          />
+        )}
       </View>
 
       { !isEating && fish > 0 ? (
@@ -59,7 +138,7 @@ export default function HomeScreen() {
       )}
 
     </View>
-      
+
   );
 }
 
@@ -83,6 +162,27 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: width * 0.8,
     right: 0,
+  },
+  clothing: {
+    width: 150,
+    height: 60,
+    position: "absolute",
+    left: "13%",
+    top: "64%"
+  },
+  bow: {
+    width: 50,
+    height: 50,
+    position: "absolute",
+    left: "28%",
+    top: "20%",
+  },
+  glasses: {
+    width: 180,
+    height: 150,
+    position: "absolute",
+    left: "9.5%",
+    top: "16%",
   },
   numberFish: {
     position: 'absolute',

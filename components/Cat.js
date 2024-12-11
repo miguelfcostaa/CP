@@ -15,6 +15,9 @@ const imageMap = {
     "cat-happy-4": require('@/assets/gifs/cat-happy-4.png'),
     "cat-happy-5": require('@/assets/gifs/cat-happy-5.png'), 
     "dirty-cat-eating": require('@/assets/gifs/dirty-cat-eating.gif'),
+    "brown":require('@/assets/images/cat-brown.png'), 
+    "white":require('@/assets/images/cat-white.png'), 
+    "orange":require('@/assets/images/cat-orange.png'), 
 };
 
 const Cat = () => {
@@ -57,10 +60,6 @@ const Cat = () => {
                 setDisplayImage("sad-cat");
             }
         }
-        
-
-        
-        
 
     }, [happiness, isDirty, isEating]); 
 

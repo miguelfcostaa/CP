@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from 'expo-router';
 import { useCart } from '@/contexts/CartContext';
 import { useCoin } from '@/contexts/CoinContext';
 import CoinOverlay from '@/components/CoinOverlay';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Dropdown } from 'react-native-element-dropdown';
 import { useFish } from '@/contexts/FishContext';
 
@@ -24,18 +25,36 @@ export default function Cart() {
         }));
     };
     const handleRemoveFromCart = (productId) => {
-        removeFromCart(productId); 
-        setCartCount((prevCount) => prevCount - 1); 
+        removeFromCart(productId);
+        setCartCount((prevCount) => prevCount - 1);
         setIsAdded(false);
     };
 
+    const setCustom = async (arr) => {
+        try {
+            const itemsString = await AsyncStorage.getItem("lockedClothes");
+            let items = JSON.parse(itemsString) || [];
+            console.log("Before:", items.map(i => i.name));
+            for(let ind in arr){
+                items = items.filter(i => i.name !== arr[ind]);
+                console.log(arr[ind])
+            }
+            console.log("After:", items.map(i => i.name));
+            await AsyncStorage.setItem("lockedClothes", JSON.stringify(items));
+        } catch (error) {
+            console.error('Error saving data', error); 
+        }
+    };
 
     const handleClearCart = () => {
         setCartCount(0);
-        clearCart(); 
+        clearCart();
     };
 
     const handleBuy = (total) => {
+        setCustom(cart.map(i => i.name))
+
+
         setCoins(coins - total);
         const fishItem = findItemByName('Fish'); 
         if (fishItem) {
@@ -134,7 +153,7 @@ export default function Cart() {
 
             <View style={styles.buyButtonFlex}>
                 <View style={styles.buyButton}>
-                    <Button title='Buy' color={'white'} onPress={() => handleBuy(total)}/>
+                    <Button title='Buy' color={'white'} onPress={() => handleBuy(total)} />
                 </View>
             </View>
         </>
