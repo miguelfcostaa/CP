@@ -11,42 +11,45 @@ import { useFish } from '@/contexts/FishContext';
 const { width, height } = Dimensions.get('window');
 
 export default function HomeScreen() {
-  const { happiness, setHappiness, hungry, setHungry, isEating, setIsEating } = useCat();
+  const { happiness, setHappiness, hungry, setHungry, isEating, setIsEating, setColor, clothing, setClothing, bow, setBow, glasses, setGlasses, setLocked } = useCat();
   const { fish, setFish } = useFish();
 
-  const [color, setColor] = useState()
-  const [clothing, setClothing] = useState()
-  const [bow, setBow] = useState()
-  const [glasses, setGlasses] = useState()
-  const [locked, setLocked] = useState([])
+  // const [color, setColor] = useState()
+  // const [clothing, setClothing] = useState()
+  // const [bow, setBow] = useState()
+  // const [glasses, setGlasses] = useState()
+  // const [locked, setLocked] = useState([])
 
+  useEffect(() => {
+    const catCustomizaton = async () => {
+      try {
+        
+        const current = await AsyncStorage.getItem('catColor')
+        if (current === null) setColor("white")
+        else setColor(current)
+        console.log("cor no home: " + current)
+        setClothing(await AsyncStorage.getItem('catClothing'))
+        setBow(await AsyncStorage.getItem('catBow'))
+        setGlasses(await AsyncStorage.getItem('catGlasses'))
+        //await AsyncStorage.setItem('lockedClothes', [])
+        setLocked(JSON.parse(await AsyncStorage.getItem('lockedClothes')))
+      } catch (error) {
+        console.error('Error retrieving data', error);
+      }
+    };
+    catCustomizaton()
+  }, [])
 
-  const catCustomizaton = async () => {
-    try {
-      
-      const current = await AsyncStorage.getItem('catColor')
-      if (current === null) setColor("white")
-      else setColor(current)
-      setClothing(await AsyncStorage.getItem('catClothing'))
-      setBow(await AsyncStorage.getItem('catBow'))
-      setGlasses(await AsyncStorage.getItem('catGlasses'))
-      //await AsyncStorage.setItem('lockedClothes', [])
-      setLocked(JSON.parse(await AsyncStorage.getItem('lockedClothes')))
-    } catch (error) {
-      console.error('Error retrieving data', error);
-    }
-  };
+  // const log = (info) => {
+  //   console.log(info)
+  // }
 
-  const log = (info) => {
-    console.log(info)
-}
-
-  useFocusEffect(
-    React.useCallback(() => {
-      catCustomizaton()
-      log("log " + locked.map(item => item.name));
-    }, []) // Runs every time the screen gains focus
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     catCustomizaton()
+  //     // log("log " + locked.map(item => item.name));
+  //   }, []) // Runs every time the screen gains focus
+  // );
 
   const handleEating = () => {
     setFish(fish - 1);
@@ -69,27 +72,8 @@ export default function HomeScreen() {
       <View style={styles.header}>
         <Header />
       </View>
-
+      
       <View style={styles.flex}>
-        {/* color */}
-        {color == "white" && (
-          <Image
-            source={require('@/assets/images/cat-white.png')}
-            style={styles.cat}
-          />
-        )}
-        {color == "brown" && (
-          <Image
-            source={require('@/assets/images/cat-brown.png')}
-            style={styles.cat}
-          />
-        )}
-        {color == "orange" && (
-          <Image
-            source={require('@/assets/images/cat-orange.png')}
-            style={styles.cat}
-          />
-        )}
         {/* clothing */}
         {clothing && (
           <Image
@@ -112,30 +96,24 @@ export default function HomeScreen() {
         )}
       </View>
 
-      { !isEating && fish > 0 ? (
-        <>
-          <Cat />
-          <TouchableOpacity onPress={() => handleEating()}>
-            <Image
-              source={require('@/assets/images/fish-icon.png')}
-              style={styles.fish}
-            /> 
-          </TouchableOpacity>
-          <Text style={styles.numberFish}> x{fish} </Text>
-        </>
 
+      <Cat />
+      { !isEating && fish > 0 ? (
+        <TouchableOpacity onPress={() => handleEating()}>
+          <Image
+            source={require('@/assets/images/fish-icon.png')}
+            style={styles.fish}
+          /> 
+        </TouchableOpacity>
       ) : (
-        <>
-          <Cat />
-          <TouchableOpacity onPress={() => handleEating()} disabled>
-            <Image
-              source={require('@/assets/images/fish-icon.png')}
-              style={[styles.fish, { opacity: 0.5 }]}
-            /> 
-          </TouchableOpacity>
-          <Text style={styles.numberFish}> x{fish} </Text>
-        </>
+        <TouchableOpacity onPress={() => handleEating()} disabled>
+          <Image
+            source={require('@/assets/images/fish-icon.png')}
+            style={[styles.fish, { opacity: 0.5 }]}
+          /> 
+        </TouchableOpacity>
       )}
+      <Text style={styles.numberFish}> x{fish} </Text>
 
     </View>
 

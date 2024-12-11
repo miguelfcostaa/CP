@@ -16,7 +16,7 @@ const AddToCart = ({ onAddToCart, onRemoveFromCart, isAdded  }) => {
         <TouchableOpacity onPress={isAdded ? handleRemoveFromCart : handleAddToCart}>
             <View style={isAdded ? styles.container_added : styles.container}>
                 {isAdded ? (
-                    <Image source={require('@/assets/icons/Check_icon.png')} style={styles.icon_added} />
+                    <Image source={require('@/assets/icons/check_icon.png')} style={styles.icon_added} />
                 ) : (
                     <>
                         <Text style={styles.text}>ADD TO CART</Text>

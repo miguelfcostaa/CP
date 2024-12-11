@@ -13,9 +13,12 @@ import { db } from '@/firebaseConfig';
 import { where, query } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CustomItem, imageMap } from '@/components/CustomItem';
+import { useCat } from '@/contexts/CatContext';
 
 export default function Customization() {
     const router = useRouter();
+    const { setColor } = useCat();
+
     const [itemsSkin, setItemsSkin] = useState([]);
     const [itemsClothing, setItemsClothing] = useState([]);
     const [itemsBow, setItemsBow] = useState([]);
@@ -119,6 +122,8 @@ export default function Customization() {
             const current = await AsyncStorage.getItem(itemStored)
             log("guardado: " + current)
             if (itemName !== current && itemName) {
+                setColor(itemName);
+                console.log("cor: " + itemName)
                 await AsyncStorage.setItem(itemStored, itemName);
             }
             else if (itemStored !== "catColor") {

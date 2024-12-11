@@ -15,19 +15,25 @@ const imageMap = {
     "cat-happy-4": require('@/assets/gifs/cat-happy-4.png'),
     "cat-happy-5": require('@/assets/gifs/cat-happy-5.png'), 
     "dirty-cat-eating": require('@/assets/gifs/dirty-cat-eating.gif'),
-    "brown":require('@/assets/images/cat-brown.png'), 
-    "white":require('@/assets/images/cat-white.png'), 
-    "orange":require('@/assets/images/cat-orange.png'), 
+    "cat-brown": require('@/assets/images/cat-brown.png'), 
+    "cat-white": require('@/assets/images/cat-white.png'), 
+    "cat-orange": require('@/assets/images/cat-orange.png'), 
 };
 
 const Cat = () => {
-    const { happiness, isDirty, isEating } = useCat();
+    const { happiness, isDirty, isEating, color, clothing, bow, glasses, locked } = useCat();
     const [displayImage, setDisplayImage] = useState("");
 
     useEffect(() => {
+        console.log("cor selecionada: " + color);
+
+        
         if (isDirty && isEating) { setDisplayImage("dirty-cat-eating"); }
         else if (isDirty) { setDisplayImage("dirty-cat"); }
         else if (isEating) { setDisplayImage("cat-eating"); }
+        else if (color === "white") { setDisplayImage("cat-white"); }
+        else if (color === "brown") { setDisplayImage("cat-brown"); }
+        else if (color === "orange") { setDisplayImage("cat-orange"); }
         else {
             if (happiness >= 100) {
                 const frames = [
@@ -96,6 +102,7 @@ const styles = StyleSheet.create({
     bottom: 60,
     zIndex: 0,
   },
+
 });
 
 export default Cat;
