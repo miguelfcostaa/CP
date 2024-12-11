@@ -12,22 +12,33 @@ export default function HomeScreen() {
   const [clothing, setClothing] = useState()
   const [bow, setBow] = useState()
   const [glasses, setGlasses] = useState()
+  const [locked, setLocked] = useState([])
+
 
   const catCustomizaton = async () => {
     try {
+      
       const current = await AsyncStorage.getItem('catColor')
       if (current === null) setColor("white")
       else setColor(current)
       setClothing(await AsyncStorage.getItem('catClothing'))
       setBow(await AsyncStorage.getItem('catBow'))
       setGlasses(await AsyncStorage.getItem('catGlasses'))
+      //await AsyncStorage.setItem('lockedClothes', [])
+      setLocked(await AsyncStorage.getItem('lockedClothes'))
     } catch (error) {
       console.error('Error retrieving data', error);
     }
   };
+
+  const log = (info) => {
+    console.log(info)
+}
+
   useFocusEffect(
     React.useCallback(() => {
       catCustomizaton()
+      log("locked: " + locked)
     }, []) // Runs every time the screen gains focus
   );
 
@@ -42,7 +53,6 @@ export default function HomeScreen() {
       <View style={styles.header}>
         <Header />
       </View>
-
       <View style={styles.flex}>
         {/* color */}
         {color == "white" && (
@@ -69,7 +79,7 @@ export default function HomeScreen() {
             source={imageMap[clothing]}
             style={styles.clothing}
           />
-        )}~
+        )}
         {/* bow */}
         {bow && (
           <Image

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import {
   StyleSheet,
   View,
@@ -16,20 +17,24 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 import CoinOverlay from '@/components/CoinOverlay';
 import { useRouter } from 'expo-router';
 import { collection, getDocs } from 'firebase/firestore';
-import { db } from '@/firebaseConfig'; 
+import { db } from '@/firebaseConfig';
 import { useCart } from '@/contexts/CartContext';
+import { useCoin } from '@/contexts/CoinContext';
 import { query, where } from 'firebase/firestore';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { replace } from 'expo-router/build/global-state/routing';
 
 export default function ShopScreen() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [shopItems, setShopItems] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [customItems, setCustomItems] = useState([]);
 
   const { cartCount, setIsAdded, setCartCount, addToCart, removeFromCart, findItemInCart } = useCart();
+  const { coins } = useCoin();
   const router = useRouter();
 
-  const drawerAnimation = useRef(new Animated.Value(-200)).current; 
+  const drawerAnimation = useRef(new Animated.Value(-200)).current;
   const buttonAnimation = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -41,36 +46,57 @@ export default function ShopScreen() {
           console.log("A coleção 'shopItems' está vazia.");
         } else {
           const itemsList = itemsSnapshot.docs.map(doc => {
-            return { id: doc.id, ...doc.data() }; 
+            return { id: doc.id, ...doc.data() };
           });
           setShopItems(itemsList);
+          getCustom();
         }
       } catch (error) {
         console.error("Erro ao buscar itens da loja:", error.message);
       }
     };
+    const getCustom = async () => {
+      try {
+        let itemsString = await AsyncStorage.getItem("lockedClothes");
+        const items = JSON.parse(itemsString);
+        setCustomItems(items);
+        //setShopItems((arr) => [...arr, items])
+      } catch (er) {
+        console.error("Error retrieving data", er);
+      }
+    };
+
     fetchShopItems();
 
   }, []);
 
+
+  useFocusEffect(
+    React.useCallback(() => {
+    
+
+    }, []) // Runs every time the screen gains focus
+  );
+
+
   const handleAddToCart = (item) => {
     if (!findItemInCart(item.id)) {
       addToCart(item);
-      setCartCount(cartCount + 1);  
+      setCartCount(cartCount + 1);
       setIsAdded(true);
     }
   };
 
   const handleRemoveFromCart = (item) => {
-    removeFromCart(item.id); 
-    setCartCount(cartCount - 1); 
+    removeFromCart(item.id);
+    setCartCount(cartCount - 1);
     setIsAdded(false);
   };
 
   const isItemInCart = (itemId) => {
     return !!findItemInCart(itemId);
   };
-  
+
   const handleGoToCart = () => {
     router.push({
       pathname: '/cart',
@@ -79,27 +105,27 @@ export default function ShopScreen() {
 
   const handleFilterItems = async (category, isChecked) => {
     let updatedCategories;
-  
+
     if (isChecked) {
       updatedCategories = [...selectedCategories, category];
     } else {
       updatedCategories = selectedCategories.filter(c => c !== category);
     }
-  
+
     setSelectedCategories(updatedCategories);
-  
+
     if (updatedCategories.length > 0) {
       try {
         const itemsCollection = collection(db, 'shopItems');
-        
+
         const queryRef = query(itemsCollection, where('category', 'in', updatedCategories));
-        
+
         const itemsSnapshot = await getDocs(queryRef);
-  
+
         const filteredItems = itemsSnapshot.docs.map(doc => {
           return { id: doc.id, ...doc.data() };
         });
-  
+
         setShopItems(filteredItems);
       } catch (error) {
         console.error("Erro ao buscar itens da loja:", error.message);
@@ -108,11 +134,11 @@ export default function ShopScreen() {
       try {
         const itemsCollection = collection(db, 'shopItems');
         const itemsSnapshot = await getDocs(itemsCollection);
-  
+
         const itemsList = itemsSnapshot.docs.map(doc => {
           return { id: doc.id, ...doc.data() };
         });
-  
+
         setShopItems(itemsList);
       } catch (error) {
         console.error("Erro ao buscar itens da loja:", error.message);
@@ -137,7 +163,7 @@ export default function ShopScreen() {
         useNativeDriver: false,
       }),
       Animated.timing(buttonAnimation, {
-        toValue: -200, 
+        toValue: -200,
         duration: 300,
         useNativeDriver: false,
       }),
@@ -152,13 +178,31 @@ export default function ShopScreen() {
         useNativeDriver: false,
       }),
       Animated.timing(buttonAnimation, {
-        toValue: 0, 
+        toValue: 0,
         duration: 300,
         useNativeDriver: false,
       }),
     ]).start(() => setDrawerOpen(false));
   };
 
+  handleReset = async () => {
+    setSelectedCategories([]);
+    try {
+      const itemsCollection = collection(db, 'shopItems');
+      const itemsSnapshot = await getDocs(itemsCollection);
+
+      const itemsList = itemsSnapshot.docs.map(doc => {
+        return { id: doc.id, ...doc.data() };
+      });
+
+      setShopItems(itemsList);
+    } catch (error) {
+      console.error("Erro ao buscar itens da loja:", error.message);
+    }
+  }
+  const log = (info) => {
+    console.log(info)
+  }
   return (
     <View style={styles.container}>
       {/* Fundo */}
@@ -182,10 +226,10 @@ export default function ShopScreen() {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.push('/home')} >
-        <Image
-          source={require('@/assets/icons/goBack_icon.png')}
-          style={styles.goBack}
-        />
+          <Image
+            source={require('@/assets/icons/goBack_icon.png')}
+            style={styles.goBack}
+          />
         </TouchableOpacity>
 
         <Text style={styles.title}>Shop</Text>
@@ -198,19 +242,30 @@ export default function ShopScreen() {
         <Text style={styles.numberCartItems}> {cartCount} </Text>
       </View>
 
-      {/* Itens da loja */} 
+      {/* Itens da loja */}
       <ScrollView>
         <View style={styles.shopContainer}>
           {shopItems.map((item) => (
-              <View key={item.id} style={styles.shopItemFlex}>
-                  <ShopItem image={item.image} name={item.name} price={item.price} />
-                  <AddToCart 
-                    onAddToCart={() => handleAddToCart(item)} 
-                    onRemoveFromCart={() => handleRemoveFromCart(item)} // A mesma função pode ser usada para adicionar e remover
-                    isAdded={isItemInCart(item.id)}
-                  />
-              </View>
+            <View key={item.id} style={styles.shopItemFlex}>
+              <ShopItem image={item.image} name={item.name} price={item.price} />
+              <AddToCart
+                onAddToCart={() => handleAddToCart(item)}
+                onRemoveFromCart={() => handleRemoveFromCart(item)} // A mesma função pode ser usada para adicionar e remover
+                isAdded={isItemInCart(item.id)}
+              />
+            </View>
           ))}
+          {customItems.map((item) => (
+            <View key={item.id} style={styles.shopItemFlex}>
+              <ShopItem image={item.image} name={item.name} price={item.price} />
+              <AddToCart
+                onAddToCart={() => handleAddToCart(item)}
+                onRemoveFromCart={() => handleRemoveFromCart(item)} // A mesma função pode ser usada para adicionar e remover
+                isAdded={isItemInCart(item.id)}
+              />
+            </View>
+          ))}
+
         </View>
       </ScrollView>
 
@@ -226,32 +281,36 @@ export default function ShopScreen() {
               <Text style={styles.drawerTitle}> Filters: </Text>
 
               <View style={styles.drawerItemFlex}>
-                <BouncyCheckbox 
+                <BouncyCheckbox
                   fillColor='#1ED73A'
                   unFillColor='#3390C9'
                   iconStyle={{ borderRadius: 8 }}
-                  onPress={(isChecked) => {handleFilterItems('food', isChecked)}} 
+                  onPress={(isChecked) => { handleFilterItems('food', isChecked) }}
                   size={25}
                   text="Food"
-                  textStyle={{color: '#fff', fontSize: 20}}
+                  textStyle={{ color: '#fff', fontSize: 20 }}
                   style={{ flexDirection: 'row-reverse', marginRight: 10, marginLeft: -10 }}
                   innerIconStyle={{ borderRadius: 8, borderWidth: 2, borderColor: '#fff' }}
                   isChecked={selectedCategories.includes('food')}
-                  onChange={(isChecked) => {handleFilterItems('food', isChecked)}}
-                />  
-                <BouncyCheckbox 
+                  onChange={(isChecked) => { handleFilterItems('food', isChecked) }}
+                />
+                <BouncyCheckbox
                   fillColor='#1ED73A'
                   unFillColor='#3390C9'
                   iconStyle={{ borderRadius: 8 }}
-                  onPress={(isChecked) => {handleFilterItems('cosmetics', isChecked)}} 
+                  onPress={(isChecked) => { handleFilterItems('cosmetics', isChecked) }}
                   size={25}
                   text="Cosmetics"
-                  textStyle={{color: '#fff', fontSize: 20}}
+                  textStyle={{ color: '#fff', fontSize: 20 }}
                   style={{ flexDirection: 'row-reverse', marginRight: 10, marginLeft: -10 }}
                   innerIconStyle={{ borderRadius: 8, borderWidth: 2, borderColor: '#fff' }}
                   isChecked={selectedCategories.includes('cosmetics')}
-                />  
+                />
               </View>
+
+              <TouchableOpacity style={styles.resetButton} onPress={() => handleReset()}>
+                <Text style={{ color: 'white', fontSize: 16 }}> Reset </Text>
+              </TouchableOpacity>
 
             </Animated.View>
           </View>
@@ -317,7 +376,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     margin: '5%',
     gap: 25,
-    
+
     zIndex: 1,
   },
   shopItemFlex: {
@@ -392,6 +451,15 @@ const styles = StyleSheet.create({
   },
   coinFlex: {
     marginBottom: 20,
+  },
+  resetButton: {
+    backgroundColor: '#004168',
+    padding: 10,
+    borderRadius: 20,
+    textAlign: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
   },
 });
 

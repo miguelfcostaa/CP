@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import {
     StyleSheet,
     View,
@@ -19,13 +20,25 @@ export default function Customization() {
     const [itemsClothing, setItemsClothing] = useState([]);
     const [itemsBow, setItemsBow] = useState([]);
     const [itemsGlasses, setItemsGlasses] = useState([]);
+    const [itemsLocked, setItemsLocked] = useState([]);
 
     useEffect(() => {
         const fetchShopItems = async () => {
             try {
                 const itemsCollection = collection(db, 'customItems');
-                let queryRef = query(itemsCollection, where("category", "==", "skin"))
+                let queryRef = query(itemsCollection, where("category", "!=", "skin"))
                 let itemsSnapshot = await getDocs(queryRef);
+                if (itemsSnapshot.empty) {
+                    console.log("Não há items nestas categorias.");
+                } else {
+                    const item = itemsSnapshot.docs.map(doc => {
+                        return { id: doc.id, ...doc.data() };
+                    });
+                    setItemsLocked(item)
+                }
+
+                queryRef = query(itemsCollection, where("category", "==", "skin"))
+                itemsSnapshot = await getDocs(queryRef);
                 if (itemsSnapshot.empty) {
                     console.log("Não há items da categoria 'skin'.");
                 } else {
@@ -73,10 +86,33 @@ export default function Customization() {
             }
         };
         fetchShopItems();
-
     }, []);
 
+    useFocusEffect(
+        React.useCallback( () => {
+            const fetchLockedClothes = async () => {
+                try {
+                    const lockedClothes = await AsyncStorage.getItem("lockedClothes");
+                    if (lockedClothes) {
+                        setItemsLocked(JSON.parse(lockedClothes));
+                    }
+                } catch (error) {
+                    console.error("Error fetching locked clothes:", error);
+                }
+            };
+    
+            fetchLockedClothes();
+        }, []) 
+      );
 
+    const addLock = async () => {
+        try {
+            await AsyncStorage.setItem("lockedClothes", JSON.stringify(itemsLocked));
+        }
+        catch (er) {
+            console.error('Error saving data', er);
+        }
+    }
     const update = async (itemName, itemStored) => {
         try {
             const current = await AsyncStorage.getItem(itemStored)
@@ -95,7 +131,7 @@ export default function Customization() {
     const log = (info) => {
         console.log(info)
     }
-
+    addLock()
     return (
         <View style={styles.background}>
             <>
@@ -116,6 +152,7 @@ export default function Customization() {
 
                 {/* Categories */}
                 <View style={styles.container}>
+
                     {/* Skin */}
                     <Text style={styles.categoryTitle}>Skin</Text>
                     <View style={styles.category}>
@@ -146,11 +183,22 @@ export default function Customization() {
                                         source={imageMap[item.name]}
                                         style={styles.clothing}
                                     />
+                                    {itemsLocked.map((i) => {
+                                        if (i.name === item.name) {
+                                            return (
+                                                <Image
+                                                    key={i.id} // Use a unique key for the lock icon
+                                                    source={require("@/assets/images/lock-icon.png")}
+                                                    style={styles.lock}
+                                                />
+                                            );
+                                        }
+                                    })}
+
                                 </TouchableOpacity>
                             )
                         })}
                     </View>
-
                     {/* Bows */}
                     <Text style={styles.categoryTitle}>Bows</Text>
                     <View style={styles.category}>
@@ -163,6 +211,17 @@ export default function Customization() {
                                         source={imageMap[item.name]}
                                         style={styles.bow}
                                     />
+                                    {itemsLocked.map((i) => {
+                                        if (i.name === item.name) {
+                                            return (
+                                                <Image
+                                                    key={i.id} 
+                                                    source={require("@/assets/images/lock-icon.png")}
+                                                    style={styles.lock}
+                                                />
+                                            );
+                                        }
+                                    })}
                                 </TouchableOpacity>
                             )
                         })}
@@ -180,6 +239,17 @@ export default function Customization() {
                                         source={imageMap[item.name]}
                                         style={styles.bow}
                                     />
+                                    {itemsLocked.map((i) => {
+                                        if (i.name === item.name) {
+                                            return (
+                                                <Image
+                                                    key={i.id} 
+                                                    source={require("@/assets/images/lock-icon.png")}
+                                                    style={styles.lock}
+                                                />
+                                            );
+                                        }
+                                    })}
                                 </TouchableOpacity>
                             )
                         })}
@@ -197,7 +267,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         ...StyleSheet.absoluteFillObject,
-      },
+    },
     background: {
         height: '100%',
         width: '100%',
@@ -241,7 +311,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFFFFF",
         borderRadius: 20,
         padding: 5,
-        height: "auto",
+        height: 90,
         width: "75%",
         display: "flex",
         flexDirection: "row",
@@ -249,6 +319,7 @@ const styles = StyleSheet.create({
         marginBottom: 25,
     },
     color: {
+        top: "22%",
         height: 40,
         width: 40,
         marginLeft: 10,
@@ -263,6 +334,7 @@ const styles = StyleSheet.create({
         width: "75%",
     },
     clothing: {
+        top: "25%",
         height: 33,
         width: 77,
         margin: 5,
@@ -271,6 +343,12 @@ const styles = StyleSheet.create({
         height: 75,
         width: 75,
         margin: 5,
+    },
+    lock: {
+        height: 30,
+        width: 30,
+        position: "absolute",
+        left: "65%",
     }
 
 });

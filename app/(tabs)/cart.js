@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from 'expo-router';
 import { useCart } from '@/contexts/CartContext';
 import { useCoin } from '@/contexts/CoinContext';
 import CoinOverlay from '@/components/CoinOverlay';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Cart() {
     const router = useRouter();
@@ -12,18 +13,38 @@ export default function Cart() {
     const { coins, setCoins } = useCoin();
 
     const handleRemoveFromCart = (productId) => {
-        removeFromCart(productId); 
-        setCartCount((prevCount) => prevCount - 1); 
+        removeFromCart(productId);
+        setCartCount((prevCount) => prevCount - 1);
         setIsAdded(false);
     };
 
+    const setCustom = async (item) => {
+        try {
+            console.log(item)
+            const itemsString = await AsyncStorage.getItem("lockedClothes");
+            let items = JSON.parse(itemsString) || [];
+            
+            console.log("Before:", items.map(i => i.name));
+    
+            // Use filter to remove the matching item
+            items = items.filter(i => i.name !== item);
+    
+            console.log("After:", items.map(i => i.name));
+            await AsyncStorage.setItem("lockedClothes", JSON.stringify(items));
+        } catch (error) {
+            console.error('Error saving data', error); 
+        }
+    };
 
     const handleClearCart = () => {
         setCartCount(0);
-        clearCart(); 
+        clearCart();
     };
 
     const handleBuy = (total) => {
+        setCustom(cart[0].name)
+
+
         setCoins(coins - total);
         handleClearCart();
         alert('Thank you for your purchase!');
@@ -53,30 +74,30 @@ export default function Cart() {
 
             <View style={styles.box}>
                 {cart.length === 0 ? (
-                        <View style={styles.inputContainer}>
-                            <Text style={styles.name}>Your cart is empty.</Text>
-                        </View>
-                ) : 
-                (cart.map((item, index) => (
-                    <View style={styles.flexBox} key={index}>
-                        <View style={styles.inputContainer} >
-                            <Text style={styles.name}> {item.name} </Text>
-                        </View>
-                        <View style={styles.inputContainer}>
-                            <Text style={styles.price}> {item.price} </Text>
-                            <Image
-                                source={require('@/assets/icons/coin-image.png')}
-                                style={styles.coinImage}
-                            />
-                        </View>
-                        <TouchableOpacity style={styles.removeContainer} onPress={() => handleRemoveFromCart(item.id)} >
-                            <Image
-                                source={require('@/assets/icons/remove_icon.png')}
-                                style={styles.removeIcon}
-                            />
-                        </TouchableOpacity>
+                    <View style={styles.inputContainer}>
+                        <Text style={styles.name}>Your cart is empty.</Text>
                     </View>
-                )))}
+                ) :
+                    (cart.map((item, index) => (
+                        <View style={styles.flexBox} key={index}>
+                            <View style={styles.inputContainer} >
+                                <Text style={styles.name}> {item.name} </Text>
+                            </View>
+                            <View style={styles.inputContainer}>
+                                <Text style={styles.price}> {item.price} </Text>
+                                <Image
+                                    source={require('@/assets/icons/coin-image.png')}
+                                    style={styles.coinImage}
+                                />
+                            </View>
+                            <TouchableOpacity style={styles.removeContainer} onPress={() => handleRemoveFromCart(item.id)} >
+                                <Image
+                                    source={require('@/assets/icons/remove_icon.png')}
+                                    style={styles.removeIcon}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                    )))}
                 <View style={styles.totalFlex}>
                     <Text style={styles.total}> Total: </Text>
                     <View style={styles.totalContainer}>
@@ -92,7 +113,7 @@ export default function Cart() {
 
             <View style={styles.buyButtonFlex}>
                 <View style={styles.buyButton}>
-                    <Button title='Buy' color={'white'} onPress={() => handleBuy(total)}/>
+                    <Button title='Buy' color={'white'} onPress={() => handleBuy(total)} />
                 </View>
             </View>
         </>
@@ -150,7 +171,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         gap: 5,
         overflow: 'auto',
-        
+
     },
     box: {
         width: '90%',
@@ -228,5 +249,5 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: "70%",
     },
-    
+
 });
