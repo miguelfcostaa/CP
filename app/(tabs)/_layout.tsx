@@ -1,10 +1,12 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { View, Image } from 'react-native';
+import { CoinProvider } from '@/contexts/CoinContext';
 
 export default function TabLayout() {
 
   return (
+    <CoinProvider>
     <Tabs
       screenOptions={{
         headerShown: false,
@@ -16,7 +18,7 @@ export default function TabLayout() {
       }}>
       <Tabs.Screen
         
-        name="index"
+        name="home"
         options={{
           title: '',
           tabBarIcon: ({ color, focused }) => (
@@ -55,7 +57,15 @@ export default function TabLayout() {
           href: null, 
         }}
       />
+    <Tabs.Screen
+        name="index"
+        options={{
+          href: null, 
+          tabBarStyle: { display: "none" }
+        }}
+      />
     </Tabs>
+    </CoinProvider>
   );
 }
 
