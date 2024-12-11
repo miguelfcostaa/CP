@@ -5,7 +5,7 @@ const CatContext = createContext();
 export const CatProvider = ({ children }) => {
     const [happiness, setHappiness] = useState(0);
     const [hungry, setHungry] = useState(0);
-    const [isDirty, setIsDirty] = useState(false);
+    const [isDirty, setIsDirty] = useState(true);
     const [isEating, setIsEating] = useState(false);
 
     if (hungry > 100) {
