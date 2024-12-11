@@ -25,7 +25,7 @@ export default function HomeScreen() {
       setBow(await AsyncStorage.getItem('catBow'))
       setGlasses(await AsyncStorage.getItem('catGlasses'))
       //await AsyncStorage.setItem('lockedClothes', [])
-      setLocked(await AsyncStorage.getItem('lockedClothes'))
+      setLocked(JSON.parse(await AsyncStorage.getItem('lockedClothes')))
     } catch (error) {
       console.error('Error retrieving data', error);
     }
@@ -38,7 +38,7 @@ export default function HomeScreen() {
   useFocusEffect(
     React.useCallback(() => {
       catCustomizaton()
-      log("locked: " + locked)
+      log("log " + locked.map(item => item.name));
     }, []) // Runs every time the screen gains focus
   );
 

@@ -89,7 +89,7 @@ export default function Customization() {
     }, []);
 
     useFocusEffect(
-        React.useCallback( () => {
+        React.useCallback(() => {
             const fetchLockedClothes = async () => {
                 try {
                     const lockedClothes = await AsyncStorage.getItem("lockedClothes");
@@ -100,10 +100,10 @@ export default function Customization() {
                     console.error("Error fetching locked clothes:", error);
                 }
             };
-    
+
             fetchLockedClothes();
-        }, []) 
-      );
+        }, [])
+    );
 
     const addLock = async () => {
         try {
@@ -115,7 +115,9 @@ export default function Customization() {
     }
     const update = async (itemName, itemStored) => {
         try {
+            log("a guardar: " + itemName)
             const current = await AsyncStorage.getItem(itemStored)
+            log("guardado: " + current)
             if (itemName !== current && itemName) {
                 await AsyncStorage.setItem(itemStored, itemName);
             }
@@ -174,55 +176,63 @@ export default function Customization() {
                     {/* Clothing */}
                     <Text style={styles.categoryTitle}>Clothing</Text>
                     <View style={styles.category}>
+
+
                         {itemsClothing.map((item) => {
                             return (
-                                <TouchableOpacity
-                                    key={item.id}
-                                    onPress={() => update(item.name, "catClothing")}>
-                                    <Image
-                                        source={imageMap[item.name]}
-                                        style={styles.clothing}
-                                    />
-                                    {itemsLocked.map((i) => {
-                                        if (i.name === item.name) {
-                                            return (
-                                                <Image
-                                                    key={i.id} // Use a unique key for the lock icon
-                                                    source={require("@/assets/images/lock-icon.png")}
-                                                    style={styles.lock}
-                                                />
-                                            );
-                                        }
-                                    })}
+                                <View key={item.id}>
+                                    {/* {itemsLocked.map((i) => { */}
+                                        <TouchableOpacity
+                                            onPress={() => update(item.name, "catClothing")}
+                                            disabled={itemsLocked.some((lockedItem) => lockedItem.name === item.name)}
+                                        >
+                                            <Image
+                                                source={imageMap[item.name]}
+                                                style={styles.clothing}
+                                            />
+                                        </TouchableOpacity>
+                                        {/* {log(item.name)} */}
+                                        {itemsLocked.some((lockedItem) => lockedItem.name === item.name) && (
+                                            <Image
+                                                source={require("@/assets/images/lock-icon.png")}
+                                                style={styles.lock}
+                                            />
+                                        )}
+                           
 
-                                </TouchableOpacity>
+                                    {/* })} */}
+                                </View>
                             )
                         })}
+
                     </View>
                     {/* Bows */}
                     <Text style={styles.categoryTitle}>Bows</Text>
                     <View style={styles.category}>
-                        {itemsBow.map((item) => {
+                    {itemsBow.map((item) => {
                             return (
-                                <TouchableOpacity
-                                    key={item.id}
-                                    onPress={() => update(item.name, "catBow")}>
-                                    <Image
-                                        source={imageMap[item.name]}
-                                        style={styles.bow}
-                                    />
-                                    {itemsLocked.map((i) => {
-                                        if (i.name === item.name) {
-                                            return (
-                                                <Image
-                                                    key={i.id} 
-                                                    source={require("@/assets/images/lock-icon.png")}
-                                                    style={styles.lock}
-                                                />
-                                            );
-                                        }
-                                    })}
-                                </TouchableOpacity>
+                                <View key={item.id}>
+                                    {/* {itemsLocked.map((i) => { */}
+                                        <TouchableOpacity
+                                            onPress={() => update(item.name, "catBow")}
+                                            disabled={itemsLocked.some((lockedItem) => lockedItem.name === item.name)}
+                                        >
+                                            <Image
+                                                source={imageMap[item.name]}
+                                                style={styles.bow}
+                                            />
+                                        </TouchableOpacity>
+                                        {/* {log(item.name)} */}
+                                        {itemsLocked.some((lockedItem) => lockedItem.name === item.name) && (
+                                            <Image
+                                                source={require("@/assets/images/lock-icon.png")}
+                                                style={styles.lock}
+                                            />
+                                        )}
+                           
+
+                                    {/* })} */}
+                                </View>
                             )
                         })}
                     </View>
@@ -230,27 +240,30 @@ export default function Customization() {
                     {/* Glasses */}
                     <Text style={styles.categoryTitle}>Glasses</Text>
                     <View style={styles.category}>
-                        {itemsGlasses.map((item) => {
+                    {itemsGlasses.map((item) => {
                             return (
-                                <TouchableOpacity
-                                    key={item.id}
-                                    onPress={() => update(item.name, "catGlasses")}>
-                                    <Image
-                                        source={imageMap[item.name]}
-                                        style={styles.bow}
-                                    />
-                                    {itemsLocked.map((i) => {
-                                        if (i.name === item.name) {
-                                            return (
-                                                <Image
-                                                    key={i.id} 
-                                                    source={require("@/assets/images/lock-icon.png")}
-                                                    style={styles.lock}
-                                                />
-                                            );
-                                        }
-                                    })}
-                                </TouchableOpacity>
+                                <View key={item.id}>
+                                    {/* {itemsLocked.map((i) => { */}
+                                        <TouchableOpacity
+                                            onPress={() => update(item.name, "catGlasses")}
+                                            disabled={itemsLocked.some((lockedItem) => lockedItem.name === item.name)}
+                                        >
+                                            <Image
+                                                source={imageMap[item.name]}
+                                                style={styles.bow}
+                                            />
+                                        </TouchableOpacity>
+                                        {/* {log(item.name)} */}
+                                        {itemsLocked.some((lockedItem) => lockedItem.name === item.name) && (
+                                            <Image
+                                                source={require("@/assets/images/lock-icon.png")}
+                                                style={styles.lock}
+                                            />
+                                        )}
+                           
+
+                                    {/* })} */}
+                                </View>
                             )
                         })}
                     </View>

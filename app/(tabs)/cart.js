@@ -18,17 +18,15 @@ export default function Cart() {
         setIsAdded(false);
     };
 
-    const setCustom = async (item) => {
+    const setCustom = async (arr) => {
         try {
-            console.log(item)
             const itemsString = await AsyncStorage.getItem("lockedClothes");
             let items = JSON.parse(itemsString) || [];
-            
             console.log("Before:", items.map(i => i.name));
-    
-            // Use filter to remove the matching item
-            items = items.filter(i => i.name !== item);
-    
+            for(let ind in arr){
+                items = items.filter(i => i.name !== arr[ind]);
+                console.log(arr[ind])
+            }
             console.log("After:", items.map(i => i.name));
             await AsyncStorage.setItem("lockedClothes", JSON.stringify(items));
         } catch (error) {
@@ -42,7 +40,7 @@ export default function Cart() {
     };
 
     const handleBuy = (total) => {
-        setCustom(cart[0].name)
+        setCustom(cart.map(i => i.name))
 
 
         setCoins(coins - total);
