@@ -14,43 +14,6 @@ export default function HomeScreen() {
   const { happiness, setHappiness, hungry, setHungry, isEating, setIsEating, setColor, clothing, setClothing, bow, setBow, glasses, setGlasses, setLocked } = useCat();
   const { fish, setFish } = useFish();
 
-  // const [color, setColor] = useState()
-  // const [clothing, setClothing] = useState()
-  // const [bow, setBow] = useState()
-  // const [glasses, setGlasses] = useState()
-  // const [locked, setLocked] = useState([])
-
-  useEffect(() => {
-    const catCustomizaton = async () => {
-      try {
-        
-        const current = await AsyncStorage.getItem('catColor')
-        if (current === null) setColor("white")
-        else setColor(current)
-        console.log("cor no home: " + current)
-        setClothing(await AsyncStorage.getItem('catClothing'))
-        setBow(await AsyncStorage.getItem('catBow'))
-        setGlasses(await AsyncStorage.getItem('catGlasses'))
-        //await AsyncStorage.setItem('lockedClothes', [])
-        setLocked(JSON.parse(await AsyncStorage.getItem('lockedClothes')))
-      } catch (error) {
-        console.error('Error retrieving data', error);
-      }
-    };
-    catCustomizaton()
-  }, [])
-
-  // const log = (info) => {
-  //   console.log(info)
-  // }
-
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     catCustomizaton()
-  //     // log("log " + locked.map(item => item.name));
-  //   }, []) // Runs every time the screen gains focus
-  // );
-
   const handleEating = () => {
     setFish(fish - 1);
     setIsEating(true);
