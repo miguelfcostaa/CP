@@ -58,7 +58,7 @@ const Cat = () => {
     const catCustomizaton = async () => {
         try {
             const current = await AsyncStorage.getItem('catColor')
-            if (current === undefined) setColor("white")
+            if (current === null) setColor("white")
             else setColor(current)
             console.log("cor no home: " + current)
             setClothing(await AsyncStorage.getItem('catClothing'))
