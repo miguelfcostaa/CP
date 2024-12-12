@@ -14,12 +14,7 @@ const imageMap = {
 
 export default function ShowerScreen() {
 
-  // tenho que fazer com que cada espuma colocada adicione 2% de progresso
-  // e que a agua do chuveiro complete os ultimos 10% restantes para completar 100%
-  // como tenho agora, so a espuma conta para o progresso e quando passo o chuveiro por cima da espuma
-  // ela desaparece e o progresso volta a 0. Nao quero isso, quero que a espuma seja removida 
-
-  const { isDirty, setIsDirty } = useCat();
+  const { isDirty, setIsDirty, setHappiness } = useCat();
   const [hasFoamBeenAdded, setHasFoamBeenAdded] = useState(false);
   const [spongePosition, setSpongePosition] = useState({ x: 0, y: 650 });
   const [foamCount, setFoamCount] = useState(0);
@@ -128,11 +123,6 @@ export default function ShowerScreen() {
       return () => clearInterval(interval);
     }
   
-    if (isDirty) {
-      setShowerProgress(0);
-      setIsShowerFinished(false);
-    }
-    
     let foamProgress = 0;
     if (isShowerFinished) {
       foamProgress = foamCount * 5;
@@ -148,9 +138,18 @@ export default function ShowerScreen() {
 
     const totalProgress = Math.min(foamProgress + waterProgress, 100);
     setShowerProgress(totalProgress);
+
+    if (isDirty) {
+      setShowerProgress(0);
+      setIsShowerFinished(false);
+    }
+    else {
+      setShowerProgress(100);
+    }
   
     if (showerProgress === 100) {
       setIsDirty(false); 
+      setHappiness((prev) => Math.min(prev + 20, 100));
       setIsShowerFinished(true);
     }
 

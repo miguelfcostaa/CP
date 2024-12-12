@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet, PanResponder } from 'react-native';
 import { useCat } from '@/contexts/CatContext';
+
 
 const imageMap = {
     "happy-cat": require('@/assets/images/happy-cat.png'),
@@ -18,15 +19,17 @@ const imageMap = {
 };
 
 const Cat = () => {
-    const { happiness, isDirty, isEating } = useCat();
+    const { happiness, setHappiness, isDirty, isEating } = useCat();
     const [displayImage, setDisplayImage] = useState("");
+    const [dragDistance, setDragDistance] = useState(0);
+    const [animationPlayed, setAnimationPlayed] = useState(false);
 
     useEffect(() => {
         if (isDirty && isEating) { setDisplayImage("dirty-cat-eating"); }
         else if (isDirty) { setDisplayImage("dirty-cat"); }
         else if (isEating) { setDisplayImage("cat-eating"); }
         else {
-            if (happiness >= 100) {
+            if (happiness >= 100 && !animationPlayed) {
                 const frames = [
                     "cat-happy-1",
                     "cat-happy-2",
@@ -42,11 +45,13 @@ const Cat = () => {
                     frameIndex++;
                     if (frameIndex === frames.length) {
                         clearInterval(interval);
+                        setAnimationPlayed(true); // Marcar como exibido
+                        setDisplayImage("very-happy-cat");
                     }
                 }, 500);
-    
+
                 return () => clearInterval(interval);
-            } 
+            }  
             else if (happiness >= 75) {
                 setDisplayImage("happy-cat");
             } 
@@ -57,15 +62,25 @@ const Cat = () => {
                 setDisplayImage("sad-cat");
             }
         }
-        
-
-        
-        
-
     }, [happiness, isDirty, isEating]); 
 
+
+    const panResponder = PanResponder.create({
+        onStartShouldSetPanResponder: () => true,
+        onPanResponderMove: (_, gestureState) => {
+            setDragDistance(prev => prev + Math.abs(gestureState.dx));
+            if (dragDistance > 500) {
+                setHappiness(prev => Math.min(prev + 5, 100));
+                setDragDistance(0); 
+            }
+        },
+        onPanResponderRelease: () => {
+            setDragDistance(0);
+        },
+    });
+
     return (
-        <View style={styles.container}>
+        <View style={styles.container} {...panResponder.panHandlers}>
             <Image  
                 source={imageMap[displayImage]}
                 style={styles.cat}

@@ -33,30 +33,23 @@ export default function HomeScreen() {
         <Header />
       </View>
 
+      <Cat />
       { !isEating && fish > 0 ? (
-        <>
-          <Cat />
-          <TouchableOpacity onPress={() => handleEating()}>
-            <Image
-              source={require('@/assets/images/fish-icon.png')}
-              style={styles.fish}
-            /> 
-          </TouchableOpacity>
-          <Text style={styles.numberFish}> x{fish} </Text>
-        </>
-
+        <TouchableOpacity onPress={() => handleEating()}>
+          <Image
+            source={require('@/assets/images/fish-icon.png')}
+            style={styles.fish}
+          /> 
+        </TouchableOpacity>
       ) : (
-        <>
-          <Cat />
-          <TouchableOpacity onPress={() => handleEating()} disabled>
-            <Image
-              source={require('@/assets/images/fish-icon.png')}
-              style={[styles.fish, { opacity: 0.5 }]}
-            /> 
-          </TouchableOpacity>
-          <Text style={styles.numberFish}> x{fish} </Text>
-        </>
+        <TouchableOpacity onPress={() => handleEating()} disabled>
+          <Image
+            source={require('@/assets/images/fish-icon.png')}
+            style={[styles.fish, { opacity: 0.5 }]}
+          /> 
+        </TouchableOpacity>
       )}
+      <Text style={styles.numberFish}> x{fish} </Text>
 
     </View>
       
