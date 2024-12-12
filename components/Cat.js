@@ -76,6 +76,18 @@ const Cat = () => {
         }, [])
     );
 
+
+    useEffect(() => {
+        const deleteAsyncItems = async () => {
+            await AsyncStorage.removeItem('catColor')
+            await AsyncStorage.removeItem('catClothing')
+            await AsyncStorage.removeItem('catBow')
+            await AsyncStorage.removeItem('catGlasses')
+        }
+        deleteAsyncItems()
+        catCustomizaton()
+    }, [])    
+
     useEffect(() => {
 
         console.log("cor selecionada: " + color);
