@@ -11,7 +11,7 @@ import { useFish } from '@/contexts/FishContext';
 const { width, height } = Dimensions.get('window');
 
 export default function HomeScreen() {
-  const { happiness, setHappiness, hungry, setHungry, isEating, setIsEating, setColor, clothing, setClothing, bow, setBow, glasses, setGlasses, setLocked } = useCat();
+  const { happiness, setHappiness, hungry, setHungry, isEating, setIsEating, clothing, bow, glasses } = useCat();
   const { fish, setFish } = useFish();
 
   const handleEating = () => {
