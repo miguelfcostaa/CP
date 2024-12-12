@@ -59,7 +59,6 @@ export default function HomeScreen() {
         )}
       </View>
 
-
       <Cat />
       { !isEating && fish > 0 ? (
         <TouchableOpacity onPress={() => handleEating()}>
