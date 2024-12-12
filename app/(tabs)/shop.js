@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   Animated,
   TouchableWithoutFeedback,
-  Button,
   ScrollView
 } from 'react-native';
 import ShopItem from '@/components/ShopItem';
@@ -19,7 +18,6 @@ import { useRouter } from 'expo-router';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebaseConfig';
 import { useCart } from '@/contexts/CartContext';
-import { useCoin } from '@/contexts/CoinContext';
 import { query, where } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -29,8 +27,7 @@ export default function ShopScreen() {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [customItems, setCustomItems] = useState([]);
 
-  const { cartCount, setIsAdded, setCartCount, addToCart, removeFromCart, findItemInCart } = useCart();
-  const { coins } = useCoin();
+  const { cartCount, findItemInCart } = useCart();
   const router = useRouter();
 
   const drawerAnimation = useRef(new Animated.Value(-200)).current;
@@ -74,23 +71,9 @@ export default function ShopScreen() {
     React.useCallback(() => {
     
 
-    }, []) // Runs every time the screen gains focus
+    }, []) 
   );
 
-
-  const handleAddToCart = (item) => {
-    if (!findItemInCart(item.id)) {
-      addToCart(item);
-      setCartCount(cartCount + 1);
-      setIsAdded(true);
-    }
-  };
-
-  const handleRemoveFromCart = (item) => {
-    removeFromCart(item.id);
-    setCartCount(cartCount - 1);
-    setIsAdded(false);
-  };
 
   const isItemInCart = (itemId) => {
     return !!findItemInCart(itemId);

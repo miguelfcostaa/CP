@@ -1,8 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Header from '@/components/Header';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect } from '@react-navigation/native';
-import { CustomItem, imageMap } from '@/components/CustomItem';
 import { Image, StyleSheet, View, Dimensions, TouchableOpacity, Text } from 'react-native';
 import Cat from '@/components/Cat';
 import { useCat } from '@/contexts/CatContext';
@@ -11,7 +8,7 @@ import { useFish } from '@/contexts/FishContext';
 const { width, height } = Dimensions.get('window');
 
 export default function HomeScreen() {
-  const { happiness, setHappiness, hungry, setHungry, isEating, setIsEating, clothing, bow, glasses } = useCat();
+  const { happiness, setHappiness, hungry, setHungry, isEating, setIsEating } = useCat();
   const { fish, setFish } = useFish();
 
   const handleEating = () => {

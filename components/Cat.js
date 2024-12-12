@@ -3,7 +3,7 @@ import { View, Image, StyleSheet, PanResponder } from 'react-native';
 import { useCat } from '@/contexts/CatContext';
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { CustomItem, imageClothesMap } from '@/components/CustomItem';
+import { imageClothesMap } from '@/components/CustomItem';
 
 
 const imageMap = {
@@ -92,7 +92,6 @@ const Cat = () => {
             const current = await AsyncStorage.getItem('catColor')
             if (current === null) setColor("white")
             else setColor(current)
-            console.log("cor no home: " + current)
             setClothing(await AsyncStorage.getItem('catClothing'))
             setBow(await AsyncStorage.getItem('catBow'))
             setGlasses(await AsyncStorage.getItem('catGlasses'))
@@ -257,10 +256,7 @@ const Cat = () => {
 
     useEffect(() => {
 
-        console.log("cor selecionada: " + color);
-
         catColor()
-
               
     }, [happiness, isDirty, isEating, color]);
 
