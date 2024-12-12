@@ -52,6 +52,17 @@ export default function Cart() {
     };
 
     const handleBuy = (total) => {
+
+        if (total === 0) {
+            alert('Your cart is empty.');
+            return;
+        }
+
+        if (coins < total) {
+            alert('You do not have enough coins.');
+            return;
+        }
+
         setCustom(cart.map(i => i.name))
 
 

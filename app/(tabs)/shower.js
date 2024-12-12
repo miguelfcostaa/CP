@@ -139,21 +139,15 @@ export default function ShowerScreen() {
     const totalProgress = Math.min(foamProgress + waterProgress, 100);
     setShowerProgress(totalProgress);
 
-    if (isDirty) {
-      setShowerProgress(0);
-      setIsShowerFinished(false);
-    }
-    else {
-      setShowerProgress(100);
-    }
   
     if (showerProgress === 100) {
       setIsDirty(false); 
       setHappiness((prev) => Math.min(prev + 20, 100));
       setIsShowerFinished(true);
+      return;
     }
 
-  }, [showerActive, foamCount, isDirty, showerProgress, foamPositions, hasFoamBeenAdded]);
+  }, [showerActive, foamCount, isDirty, showerProgress, foamPositions, hasFoamBeenAdded, isShowerFinished]);
 
   const addFoam = (touchX, touchY) => {
     if (!isShowerFinished) { 
