@@ -31,13 +31,37 @@ const imageMap = {
     "sad-cat-white": require('@/assets/images/sad-cat-white.png'),
     "cat-eating-white": require('@/assets/gifs/cat-eating-white.gif'),
 
-    "dirty-cat": require('@/assets/images/dirty-cat.png'),
+    "dirty-very-happy-cat-default": require('@/assets/images/dirty-very-happy-cat-default.png'),
+    "dirty-happy-cat-default": require('@/assets/images/dirty-happy-cat-default.png'),
+    "dirty-normal-cat-default": require('@/assets/images/dirty-normal-cat-default.png'),
+    "dirty-sad-cat-default": require('@/assets/images/dirty-sad-cat-default.png'),
+
+    "dirty-very-happy-cat-orange": require('@/assets/images/dirty-very-happy-cat-orange.png'),
+    "dirty-happy-cat-orange": require('@/assets/images/dirty-happy-cat-orange.png'),
+    "dirty-normal-cat-orange": require('@/assets/images/dirty-normal-cat-orange.png'),
+    "dirty-sad-cat-orange": require('@/assets/images/dirty-sad-cat-orange.png'),
+
+    "dirty-very-happy-cat-brown": require('@/assets/images/dirty-very-happy-cat-brown.png'),
+    "dirty-happy-cat-brown": require('@/assets/images/dirty-happy-cat-brown.png'),
+    "dirty-normal-cat-brown": require('@/assets/images/dirty-normal-cat-brown.png'),
+    "dirty-sad-cat-brown": require('@/assets/images/dirty-sad-cat-brown.png'),
+
+    "dirty-very-happy-cat-white": require('@/assets/images/dirty-very-happy-cat-white.png'),
+    "dirty-happy-cat-white": require('@/assets/images/dirty-happy-cat-white.png'),
+    "dirty-normal-cat-white": require('@/assets/images/dirty-normal-cat-white.png'),
+    "dirty-sad-cat-white": require('@/assets/images/dirty-sad-cat-white.png'),
+
     "cat-happy-1": require('@/assets/gifs/cat-happy-1.png'),
     "cat-happy-2": require('@/assets/gifs/cat-happy-2.png'),
     "cat-happy-3": require('@/assets/gifs/cat-happy-3.png'),
     "cat-happy-4": require('@/assets/gifs/cat-happy-4.png'),
     "cat-happy-5": require('@/assets/gifs/cat-happy-5.png'),
-    "dirty-cat-eating": require('@/assets/gifs/dirty-cat-eating.gif'),
+    
+    "dirty-cat-eating-default": require('@/assets/gifs/dirty-cat-eating-default.gif'),
+    "dirty-cat-eating-orange": require('@/assets/gifs/dirty-cat-eating-orange.gif'),
+    "dirty-cat-eating-brown": require('@/assets/gifs/dirty-cat-eating-brown.gif'),
+    "dirty-cat-eating-white": require('@/assets/gifs/dirty-cat-eating-white.gif'),
+
     "cat-brown": require('@/assets/images/cat-brown.png'),
     "cat-white": require('@/assets/images/cat-white.png'),
     "cat-orange": require('@/assets/images/cat-orange.png'),
@@ -93,153 +117,296 @@ const Cat = () => {
         console.log("cor selecionada: " + color);
 
         if (color === "default") {
-            if (isEating) { setDisplayImage("cat-eating-default"); }
-            if (happiness >= 100 && !animationPlayed) {
-                const frames = [
-                    "cat-happy-1",
-                    "cat-happy-2",
-                    "cat-happy-3",
-                    "cat-happy-4",
-                    "cat-happy-5",
-                    "very-happy-cat-default",
-                ];
-
-                let frameIndex = 0;
-                const interval = setInterval(() => {
-                    setDisplayImage(frames[frameIndex]);
-                    frameIndex++;
-                    if (frameIndex === frames.length) {
-                        clearInterval(interval);
-                        setAnimationPlayed(true); // Marcar como exibido
-                        setDisplayImage("very-happy-cat-default");
-                    }
-                }, 500);
-
-                return () => clearInterval(interval);
-            }  
-            else if (happiness >= 75) {
-                setDisplayImage("happy-cat-default");
-            } 
-            else if (happiness >= 50) {
-                setDisplayImage("normal-cat-default");
-            } 
+            if (isDirty) {
+                if (isEating) { setDisplayImage("dirty-cat-eating-default"); }
+                else if (happiness >= 100 && !animationPlayed) {
+                    const frames = [
+                        "cat-happy-1",
+                        "cat-happy-2",
+                        "cat-happy-3",
+                        "cat-happy-4",
+                        "cat-happy-5",
+                        "dirty-very-happy-cat-default",
+                    ];
+    
+                    let frameIndex = 0;
+                    const interval = setInterval(() => {
+                        setDisplayImage(frames[frameIndex]);
+                        frameIndex++;
+                        if (frameIndex === frames.length) {
+                            clearInterval(interval);
+                            setAnimationPlayed(true); 
+                            setDisplayImage("dirty-very-happy-cat-default");
+                        }
+                    }, 500);
+    
+                    return () => clearInterval(interval);
+                }  
+                else if (happiness >= 75) {
+                    setDisplayImage("dirty-happy-cat-default");
+                } 
+                else if (happiness >= 50) {
+                    setDisplayImage("dirty-normal-cat-default");
+                } 
+                else {
+                    setDisplayImage("dirty-sad-cat-default");
+                }
+            }
             else {
-                setDisplayImage("sad-cat-default");
+                if (isEating) { setDisplayImage("cat-eating-default"); }
+                else if (happiness >= 100 && !animationPlayed) {
+                    const frames = [
+                        "cat-happy-1",
+                        "cat-happy-2",
+                        "cat-happy-3",
+                        "cat-happy-4",
+                        "cat-happy-5",
+                        "very-happy-cat-default",
+                    ];
+    
+                    let frameIndex = 0;
+                    const interval = setInterval(() => {
+                        setDisplayImage(frames[frameIndex]);
+                        frameIndex++;
+                        if (frameIndex === frames.length) {
+                            clearInterval(interval);
+                            setAnimationPlayed(true); 
+                            setDisplayImage("very-happy-cat-default");
+                        }
+                    }, 500);
+    
+                    return () => clearInterval(interval);
+                }  
+                else if (happiness >= 75) {
+                    setDisplayImage("happy-cat-default");
+                } 
+                else if (happiness >= 50) {
+                    setDisplayImage("normal-cat-default");
+                } 
+                else {
+                    setDisplayImage("sad-cat-default");
+                }
             }
         }
 
         if (color === "orange") {
-            if (isEating) { setDisplayImage("cat-eating-orange"); }
-            else if (happiness >= 100 && !animationPlayed) {
-                const frames = [
-                    "cat-happy-1",
-                    "cat-happy-2",
-                    "cat-happy-3",
-                    "cat-happy-4",
-                    "cat-happy-5",
-                    "very-happy-cat-orange",
-                ];
-
-                let frameIndex = 0;
-                const interval = setInterval(() => {
-                    setDisplayImage(frames[frameIndex]);
-                    frameIndex++;
-                    if (frameIndex === frames.length) {
-                        clearInterval(interval);
-                        setAnimationPlayed(true); // Marcar como exibido
-                        setDisplayImage("very-happy-cat-orange");
-                    }
-                }, 500);
-
-                return () => clearInterval(interval);
-            }  
-            else if (happiness >= 75) {
-                setDisplayImage("happy-cat-orange");
-            } 
-            else if (happiness >= 50) {
-                setDisplayImage("normal-cat-orange");
-            } 
+            if (isDirty) {
+                if (isEating) { setDisplayImage("dirty-cat-eating-orange"); }
+                else if (happiness >= 100 && !animationPlayed) {
+                    const frames = [
+                        "cat-happy-1",
+                        "cat-happy-2",
+                        "cat-happy-3",
+                        "cat-happy-4",
+                        "cat-happy-5",
+                        "dirty-very-happy-cat-orange",
+                    ];
+    
+                    let frameIndex = 0;
+                    const interval = setInterval(() => {
+                        setDisplayImage(frames[frameIndex]);
+                        frameIndex++;
+                        if (frameIndex === frames.length) {
+                            clearInterval(interval);
+                            setAnimationPlayed(true);
+                            setDisplayImage("dirty-very-happy-cat-orange");
+                        }
+                    }, 500);
+    
+                    return () => clearInterval(interval);
+                }  
+                else if (happiness >= 75) {
+                    setDisplayImage("dirty-happy-cat-orange");
+                } 
+                else if (happiness >= 50) {
+                    setDisplayImage("dirty-normal-cat-orange");
+                } 
+                else {
+                    setDisplayImage("dirty-sad-cat-orange");
+                }
+            }
             else {
-                setDisplayImage("sad-cat-orange");
+                if (isEating) { setDisplayImage("cat-eating-orange"); }
+                else if (happiness >= 100 && !animationPlayed) {
+                    const frames = [
+                        "cat-happy-1",
+                        "cat-happy-2",
+                        "cat-happy-3",
+                        "cat-happy-4",
+                        "cat-happy-5",
+                        "very-happy-cat-orange",
+                    ];
+    
+                    let frameIndex = 0;
+                    const interval = setInterval(() => {
+                        setDisplayImage(frames[frameIndex]);
+                        frameIndex++;
+                        if (frameIndex === frames.length) {
+                            clearInterval(interval);
+                            setAnimationPlayed(true); // Marcar como exibido
+                            setDisplayImage("very-happy-cat-orange");
+                        }
+                    }, 500);
+    
+                    return () => clearInterval(interval);
+                }  
+                else if (happiness >= 75) {
+                    setDisplayImage("happy-cat-orange");
+                } 
+                else if (happiness >= 50) {
+                    setDisplayImage("normal-cat-orange");
+                } 
+                else {
+                    setDisplayImage("sad-cat-orange");
+                }
             }
         }
 
         if (color === "brown") {
-            if (isEating) { setDisplayImage("cat-eating-brown"); }
-            else if (happiness >= 100 && !animationPlayed) {
-                const frames = [
-                    "cat-happy-1",
-                    "cat-happy-2",
-                    "cat-happy-3",
-                    "cat-happy-4",
-                    "cat-happy-5",
-                    "very-happy-cat-brown",
-                ];
-
-                let frameIndex = 0;
-                const interval = setInterval(() => {
-                    setDisplayImage(frames[frameIndex]);
-                    frameIndex++;
-                    if (frameIndex === frames.length) {
-                        clearInterval(interval);
-                        setAnimationPlayed(true); // Marcar como exibido
-                        setDisplayImage("very-happy-cat-brown");
-                    }
-                }, 500);
-
-                return () => clearInterval(interval);
-            }  
-            else if (happiness >= 75) {
-                setDisplayImage("happy-cat-brown");
-            } 
-            else if (happiness >= 50) {
-                setDisplayImage("normal-cat-brown");
-            } 
+            if (isDirty) {
+                if (isEating) { setDisplayImage("dirty-cat-eating-brown"); }
+                else if (happiness >= 100 && !animationPlayed) {
+                    const frames = [
+                        "cat-happy-1",
+                        "cat-happy-2",
+                        "cat-happy-3",
+                        "cat-happy-4",
+                        "cat-happy-5",
+                        "dirty-very-happy-cat-brown",
+                    ];
+    
+                    let frameIndex = 0;
+                    const interval = setInterval(() => {
+                        setDisplayImage(frames[frameIndex]);
+                        frameIndex++;
+                        if (frameIndex === frames.length) {
+                            clearInterval(interval);
+                            setAnimationPlayed(true); 
+                            setDisplayImage("dirty-very-happy-cat-brown");
+                        }
+                    }, 500);
+    
+                    return () => clearInterval(interval);
+                }  
+                else if (happiness >= 75) {
+                    setDisplayImage("dirty-happy-cat-brown");
+                } 
+                else if (happiness >= 50) {
+                    setDisplayImage("dirty-normal-cat-brown");
+                } 
+                else {
+                    setDisplayImage("dirty-sad-cat-brown");
+                }
+            }
             else {
-                setDisplayImage("sad-cat-brown");
+                if (isEating) { setDisplayImage("cat-eating-brown"); }
+                else if (happiness >= 100 && !animationPlayed) {
+                    const frames = [
+                        "cat-happy-1",
+                        "cat-happy-2",
+                        "cat-happy-3",
+                        "cat-happy-4",
+                        "cat-happy-5",
+                        "very-happy-cat-brown",
+                    ];
+    
+                    let frameIndex = 0;
+                    const interval = setInterval(() => {
+                        setDisplayImage(frames[frameIndex]);
+                        frameIndex++;
+                        if (frameIndex === frames.length) {
+                            clearInterval(interval);
+                            setAnimationPlayed(true);
+                            setDisplayImage("very-happy-cat-brown");
+                        }
+                    }, 500);
+    
+                    return () => clearInterval(interval);
+                }  
+                else if (happiness >= 75) {
+                    setDisplayImage("happy-cat-brown");
+                } 
+                else if (happiness >= 50) {
+                    setDisplayImage("normal-cat-brown");
+                } 
+                else {
+                    setDisplayImage("sad-cat-brown");
+                }
             }
         }
 
         if (color === "white") {
-            if (isDirty && isEating) { setDisplayImage("dirty-cat-eating"); }
-            if (isEating) { setDisplayImage("cat-eating-white"); }
-            else if (happiness >= 100 && !animationPlayed) {
-                const frames = [
-                    "cat-happy-1",
-                    "cat-happy-2",
-                    "cat-happy-3",
-                    "cat-happy-4",
-                    "cat-happy-5",
-                    "very-happy-cat-white",
-                ];
-
-                let frameIndex = 0;
-                const interval = setInterval(() => {
-                    setDisplayImage(frames[frameIndex]);
-                    frameIndex++;
-                    if (frameIndex === frames.length) {
-                        clearInterval(interval);
-                        setAnimationPlayed(true); // Marcar como exibido
-                        setDisplayImage("very-happy-cat-white");
-                    }
-                }, 500);
-
-                return () => clearInterval(interval);
-            }  
-            else if (happiness >= 75) {
-                setDisplayImage("happy-cat-white");
-            } 
-            else if (happiness >= 50) {
-                setDisplayImage("normal-cat-white");
-            } 
+            if (isDirty) {
+                if (isEating) { setDisplayImage("dirty-cat-eating-white"); }
+                else if (happiness >= 100 && !animationPlayed) {
+                    const frames = [
+                        "cat-happy-1",
+                        "cat-happy-2",
+                        "cat-happy-3",
+                        "cat-happy-4",
+                        "cat-happy-5",
+                        "dirty-very-happy-cat-white",
+                    ];
+    
+                    let frameIndex = 0;
+                    const interval = setInterval(() => {
+                        setDisplayImage(frames[frameIndex]);
+                        frameIndex++;
+                        if (frameIndex === frames.length) {
+                            clearInterval(interval);
+                            setAnimationPlayed(true);
+                            setDisplayImage("dirty-very-happy-cat-white");
+                        }
+                    }, 500);
+    
+                    return () => clearInterval(interval);
+                }  
+                else if (happiness >= 75) {
+                    setDisplayImage("dirty-happy-cat-white");
+                } 
+                else if (happiness >= 50) {
+                    setDisplayImage("dirty-normal-cat-white");
+                } 
+                else {
+                    setDisplayImage("dirty-sad-cat-white");
+                }
+            }
             else {
-                setDisplayImage("sad-cat-white");
+                if (isEating) { setDisplayImage("cat-eating-white"); }
+                else if (happiness >= 100 && !animationPlayed) {
+                    const frames = [
+                        "cat-happy-1",
+                        "cat-happy-2",
+                        "cat-happy-3",
+                        "cat-happy-4",
+                        "cat-happy-5",
+                        "very-happy-cat-default",
+                    ];
+    
+                    let frameIndex = 0;
+                    const interval = setInterval(() => {
+                        setDisplayImage(frames[frameIndex]);
+                        frameIndex++;
+                        if (frameIndex === frames.length) {
+                            clearInterval(interval);
+                            setAnimationPlayed(true); 
+                            setDisplayImage("very-happy-cat-white");
+                        }
+                    }, 500);
+    
+                    return () => clearInterval(interval);
+                }  
+                else if (happiness >= 75) {
+                    setDisplayImage("happy-cat-white");
+                } 
+                else if (happiness >= 50) {
+                    setDisplayImage("normal-cat-white");
+                } 
+                else {
+                    setDisplayImage("sad-cat-white");
+                }
             }
         }
-
-              
-        if (isDirty && isEating) { setDisplayImage("dirty-cat-eating"); }
-        else if (isDirty) { setDisplayImage("dirty-cat"); }
 
               
     }, [happiness, isDirty, isEating, color]);
