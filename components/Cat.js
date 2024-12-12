@@ -7,12 +7,31 @@ import { CustomItem, imageClothesMap } from '@/components/CustomItem';
 
 
 const imageMap = {
-    "happy-cat": require('@/assets/images/happy-cat.png'),
-    "normal-cat": require('@/assets/images/normal-cat.png'),
-    "sad-cat": require('@/assets/images/sad-cat.png'),
+    "very-happy-cat-default": require('@/assets/images/very-happy-cat-default.png'),
+    "happy-cat-default": require('@/assets/images/happy-cat-default.png'),
+    "normal-cat- default": require('@/assets/images/normal-cat-default.png'),
+    "sad-cat-default": require('@/assets/images/sad-cat-default.png'),
+    "cat-eating-default": require('@/assets/gifs/cat-eating-default.gif'),
+
+    "very-happy-cat-orange": require('@/assets/images/very-happy-cat-orange.png'),
+    "happy-cat-orange": require('@/assets/images/happy-cat-orange.png'),
+    "normal-cat-orange": require('@/assets/images/normal-cat-orange.png'),
+    "sad-cat-orange": require('@/assets/images/sad-cat-orange.png'),
+    "cat-eating-orange": require('@/assets/gifs/cat-eating-orange.gif'),
+
+    "very-happy-cat-brown": require('@/assets/images/very-happy-cat-brown.png'),
+    "happy-cat-brown": require('@/assets/images/happy-cat-brown.png'),
+    "normal-cat-brown": require('@/assets/images/normal-cat-brown.png'),
+    "sad-cat-brown": require('@/assets/images/sad-cat-brown.png'),
+    "cat-eating-brown": require('@/assets/gifs/cat-eating-brown.gif'),
+
+    "very-happy-cat-white": require('@/assets/images/very-happy-cat-white.png'),
+    "happy-cat-white": require('@/assets/images/happy-cat-white.png'),
+    "normal-cat-white": require('@/assets/images/normal-cat-white.png'),
+    "sad-cat-white": require('@/assets/images/sad-cat-white.png'),
+    "cat-eating-white": require('@/assets/gifs/cat-eating-white.gif'),
+
     "dirty-cat": require('@/assets/images/dirty-cat.png'),
-    "cat-eating": require('@/assets/gifs/cat-eating.gif'),
-    "very-happy-cat": require('@/assets/images/very-happy-cat.png'),
     "cat-happy-1": require('@/assets/gifs/cat-happy-1.png'),
     "cat-happy-2": require('@/assets/gifs/cat-happy-2.png'),
     "cat-happy-3": require('@/assets/gifs/cat-happy-3.png'),
@@ -61,8 +80,8 @@ const Cat = () => {
 
         console.log("cor selecionada: " + color);
 
-        if (color === "white") {
-            setDisplayImage("cat-white");
+        if (color === "default") {
+            if (isEating) { setDisplayImage("cat-eating-default"); }
             if (happiness >= 100 && !animationPlayed) {
                 const frames = [
                     "cat-happy-1",
@@ -70,7 +89,7 @@ const Cat = () => {
                     "cat-happy-3",
                     "cat-happy-4",
                     "cat-happy-5",
-                    "very-happy-cat",
+                    "very-happy-cat-default",
                 ];
 
                 let frameIndex = 0;
@@ -80,29 +99,135 @@ const Cat = () => {
                     if (frameIndex === frames.length) {
                         clearInterval(interval);
                         setAnimationPlayed(true); // Marcar como exibido
-                        setDisplayImage("very-happy-cat");
+                        setDisplayImage("very-happy-cat-default");
                     }
                 }, 500);
 
                 return () => clearInterval(interval);
             }  
             else if (happiness >= 75) {
-                setDisplayImage("happy-cat");
+                setDisplayImage("happy-cat-default");
             } 
             else if (happiness >= 50) {
-                setDisplayImage("normal-cat");
+                setDisplayImage("normal-cat-default");
             } 
             else {
-                setDisplayImage("sad-cat");
+                setDisplayImage("sad-cat-default");
             }
-
         }
+
+        if (color === "orange") {
+            if (isEating) { setDisplayImage("cat-eating-orange"); }
+            else if (happiness >= 100 && !animationPlayed) {
+                const frames = [
+                    "cat-happy-1",
+                    "cat-happy-2",
+                    "cat-happy-3",
+                    "cat-happy-4",
+                    "cat-happy-5",
+                    "very-happy-cat-orange",
+                ];
+
+                let frameIndex = 0;
+                const interval = setInterval(() => {
+                    setDisplayImage(frames[frameIndex]);
+                    frameIndex++;
+                    if (frameIndex === frames.length) {
+                        clearInterval(interval);
+                        setAnimationPlayed(true); // Marcar como exibido
+                        setDisplayImage("very-happy-cat-orange");
+                    }
+                }, 500);
+
+                return () => clearInterval(interval);
+            }  
+            else if (happiness >= 75) {
+                setDisplayImage("happy-cat-orange");
+            } 
+            else if (happiness >= 50) {
+                setDisplayImage("normal-cat-orange");
+            } 
+            else {
+                setDisplayImage("sad-cat-orange");
+            }
+        }
+
+        if (color === "brown") {
+            if (isEating) { setDisplayImage("cat-eating-brown"); }
+            else if (happiness >= 100 && !animationPlayed) {
+                const frames = [
+                    "cat-happy-1",
+                    "cat-happy-2",
+                    "cat-happy-3",
+                    "cat-happy-4",
+                    "cat-happy-5",
+                    "very-happy-cat-brown",
+                ];
+
+                let frameIndex = 0;
+                const interval = setInterval(() => {
+                    setDisplayImage(frames[frameIndex]);
+                    frameIndex++;
+                    if (frameIndex === frames.length) {
+                        clearInterval(interval);
+                        setAnimationPlayed(true); // Marcar como exibido
+                        setDisplayImage("very-happy-cat-brown");
+                    }
+                }, 500);
+
+                return () => clearInterval(interval);
+            }  
+            else if (happiness >= 75) {
+                setDisplayImage("happy-cat-brown");
+            } 
+            else if (happiness >= 50) {
+                setDisplayImage("normal-cat-brown");
+            } 
+            else {
+                setDisplayImage("sad-cat-brown");
+            }
+        }
+
+        if (color === "white") {
+            if (isEating) { setDisplayImage("cat-eating-white"); }
+            else if (happiness >= 100 && !animationPlayed) {
+                const frames = [
+                    "cat-happy-1",
+                    "cat-happy-2",
+                    "cat-happy-3",
+                    "cat-happy-4",
+                    "cat-happy-5",
+                    "very-happy-cat-white",
+                ];
+
+                let frameIndex = 0;
+                const interval = setInterval(() => {
+                    setDisplayImage(frames[frameIndex]);
+                    frameIndex++;
+                    if (frameIndex === frames.length) {
+                        clearInterval(interval);
+                        setAnimationPlayed(true); // Marcar como exibido
+                        setDisplayImage("very-happy-cat-white");
+                    }
+                }, 500);
+
+                return () => clearInterval(interval);
+            }  
+            else if (happiness >= 75) {
+                setDisplayImage("happy-cat-white");
+            } 
+            else if (happiness >= 50) {
+                setDisplayImage("normal-cat-white");
+            } 
+            else {
+                setDisplayImage("sad-cat-white");
+            }
+        }
+
               
         if (isDirty && isEating) { setDisplayImage("dirty-cat-eating"); }
         else if (isDirty) { setDisplayImage("dirty-cat"); }
-        else if (isEating) { setDisplayImage("cat-eating"); }
-        else if (color === "brown") { setDisplayImage("cat-brown"); }
-        else if (color === "orange") { setDisplayImage("cat-orange"); }
+
               
     }, [happiness, isDirty, isEating, color]);
 
