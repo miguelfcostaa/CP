@@ -84,7 +84,7 @@ const Cat = () => {
             await AsyncStorage.removeItem('catBow')
             await AsyncStorage.removeItem('catGlasses')
         }
-        //deleteAsyncItems()
+        deleteAsyncItems()
         catCustomizaton()
     }, [])    
 
@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
         height: 60,
         position: "absolute",
         alignSelf:"center",
-        top: "72%",
+        bottom: 115,
         zIndex: 2,
     },
     bow: {
@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
         height: 50,
         position: "absolute",
         alignSelf:"center",
-        top: "51%",
+        bottom: 250,
         zIndex: 2,
     },
     glasses: {
@@ -333,7 +333,7 @@ const styles = StyleSheet.create({
         height: 140,
         position: "absolute",
         alignSelf:"center",
-        top: "52%",
+        bottom: 155,
         zIndex: 2,
     },
 });
