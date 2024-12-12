@@ -7,6 +7,15 @@ const imageMap = {
     "cat-bed": require('@/assets/images/cat-bed.png'),
     "cat-bed-deluxe": require('@/assets/images/cat-bed-deluxe.png'),
     "red-shirt-cat": require('@/assets/images/red-shirt-cat.png'),
+    "Green_Shirt.png": require('@/assets/images/green-shirt-cat.png'),
+    "Blue_Shirt.png": require('@/assets/images/blue-shirt-cat.png'),
+    "Red_Shirt.png": require('@/assets/images/red-shirt-cat.png'),
+    "Pink_Bow.png": require('@/assets/images/Customization/Pink_Bow.png'),
+    "Blue_Bow.png": require('@/assets/images/Customization/Blue_Bow.png'),
+    "Yellow_Bow.png": require('@/assets/images/Customization/Yellow_Bow.png'),
+    "Round_Glasses.png": require('@/assets/images/Customization/Round_Glasses.png'),
+    "Black_Sunglasses.png": require('@/assets/images/Customization/Black_Sunglasses.png'),
+    "Yellow_Sunglasses.png": require('@/assets/images/Customization/Yellow_Sunglasses.png'),
     "fish" : require('@/assets/images/fish.png'),
 };
 
@@ -80,4 +89,3 @@ const styles = StyleSheet.create({
 });
 
 export default ShopItem;
-

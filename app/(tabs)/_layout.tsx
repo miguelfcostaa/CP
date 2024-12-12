@@ -90,7 +90,29 @@ export default function TabLayout() {
           },
         }}
       />
-
+      <Tabs.Screen
+        name="customization"
+        options={{
+          title: '',
+          tabBarIcon: ({ color, focused }) => {
+            if (focused) {
+              return (
+                <Image
+                  source={require('@/assets/icons/customization_button_focused.png')}
+                  style={styles.icon}
+                />
+              );
+            } else {
+              return (
+                <Image
+                  source={require('@/assets/icons/customization_button.png')}
+                  style={styles.icon}
+                />
+              );
+            }
+          },
+        }}
+      />
       <Tabs.Screen
         name="cart"
         options={{
