@@ -12,23 +12,10 @@ import { useFish } from '@/contexts/FishContext';
 export default function Cart() {
     const router = useRouter();
 
-    const { cart, setIsAdded, setCartCount, removeFromCart, clearCart, findItemByName } = useCart();
+    const { quantities, cart, setCartCount, removeFromCart, clearCart, findItemByName, handleQuantityChange, calculateTotal } = useCart();
     const { coins, setCoins } = useCoin();
-    const { fish, setFish } = useFish();
-    const [quantities, setQuantities] = useState({});
-    const [dropdownOpen, setDropdownOpen] = useState(null);
+    const { setFish } = useFish();
 
-    const handleQuantityChange = (productId, value) => {
-        setQuantities((prev) => ({
-            ...prev,
-            [productId]: parseInt(value, 10),
-        }));
-    };
-    const handleRemoveFromCart = (productId) => {
-        removeFromCart(productId);
-        setCartCount((prevCount) => prevCount - 1);
-        setIsAdded(false);
-    };
 
     const setCustom = async (arr) => {
         try {
@@ -77,7 +64,7 @@ export default function Cart() {
         router.push('/shop');
     }
 
-    const total = cart.reduce((acc, item) => acc + item.price * (quantities[item.id] || 1), 0);
+    const total = calculateTotal();
 
     return (
         <>
@@ -108,7 +95,7 @@ export default function Cart() {
                 (cart.map((item, index) => (
                     
                     <View style={styles.flexBox} key={index}>
-                        <View style={styles.inputContainer}>
+                        <View style={styles.inputContainerDropdown}>
                             <Dropdown
                                 data={[...Array(10).keys()].map((i) => ({
                                     label: `${i + 1}`,
@@ -123,10 +110,10 @@ export default function Cart() {
                                 maxHeight={150}
                                 containerStyle={styles.dropdownContainer}
                                 iconColor='#fff'
-                                placeholderStyle={{ color: '#FFFFFF' }} 
-                                itemTextStyle={{ color: '#000' }}
-                                selectedTextStyle={{ color: '#FFFFFF' }}
-                                font
+                                placeholderStyle={{ color: '#fff' }} 
+                                itemTextStyle={{ color: '#fff' }}
+                                selectedTextStyle={{ color: '#fff' }}
+                                activeColor='#3db5ff'
                             />
                         </View>
                         <View style={styles.inputContainer} >
@@ -139,7 +126,7 @@ export default function Cart() {
                                 style={styles.coinImage}
                             />
                         </View>
-                        <TouchableOpacity style={styles.removeContainer} onPress={() => handleRemoveFromCart(item.id)} >
+                        <TouchableOpacity style={styles.removeContainer} onPress={() => removeFromCart(item.id)} >
                             <Image
                                 source={require('@/assets/icons/remove_icon.png')}
                                 style={styles.removeIcon}
@@ -234,7 +221,7 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         backgroundColor: '#007BC6',
-        padding: 10,
+        padding: 5,
         borderRadius: 10,
         display: 'flex',
         flexDirection: 'row',
@@ -243,26 +230,26 @@ const styles = StyleSheet.create({
     },
     name: {
         color: '#FFFFFF',
-        fontSize: 24,
+        fontSize: 18,
     },
     price: {
         color: '#FFFFFF',
-        fontSize: 24,
+        fontSize: 18,
     },
     coinImage: {
-        width: 32,
-        height: 32,
+        width: 24,
+        height: 24,
         alignSelf: 'center',
     },
     removeContainer: {
-        borderRadius: 10,
         display: 'flex',
         flexDirection: 'row',
-        alignSelf: 'center',
+        alignItems: 'center',
+        marginBottom: 10,
     },
     removeIcon: {
-        width: 29,
-        height: 29,
+        width: 24,
+        height: 24,
     },
     buyButtonFlex: {
         display: 'flex',
@@ -300,15 +287,23 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: "70%",
     },
+    inputContainerDropdown: {
+        backgroundColor: '#2795d9',
+        padding: 10,
+        borderRadius: 10,
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 10,
+    },
     dropdown: {
         height: 30,
         width: 40,
         paddingLeft: 2,
-        backgroundColor: '#007BC6',
     },
     dropdownContainer: {
         borderColor: '#007BC6',
-        backgroundColor: '#fff',
+        backgroundColor: '#2795d9',
         borderRadius: 8,
         width: 60,
         height: 150,

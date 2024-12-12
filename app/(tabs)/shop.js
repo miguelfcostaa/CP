@@ -22,7 +22,6 @@ import { useCart } from '@/contexts/CartContext';
 import { useCoin } from '@/contexts/CoinContext';
 import { query, where } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { replace } from 'expo-router/build/global-state/routing';
 
 export default function ShopScreen() {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -238,6 +237,7 @@ export default function ShopScreen() {
           />
         </TouchableOpacity>
         <Text style={styles.numberCartItems}> {cartCount} </Text>
+        
       </View>
 
       {/* Itens da loja */}
@@ -246,21 +246,13 @@ export default function ShopScreen() {
           {shopItems.map((item) => (
             <View key={item.id} style={styles.shopItemFlex}>
               <ShopItem image={item.image} name={item.name} price={item.price} />
-              <AddToCart
-                onAddToCart={() => handleAddToCart(item)}
-                onRemoveFromCart={() => handleRemoveFromCart(item)} // A mesma função pode ser usada para adicionar e remover
-                isAdded={isItemInCart(item.id)}
-              />
+              <AddToCart item={item} />
             </View>
           ))}
           {customItems.map((item) => (
             <View key={item.id} style={styles.shopItemFlex}>
               <ShopItem image={item.image} name={item.name} price={item.price} />
-              <AddToCart
-                onAddToCart={() => handleAddToCart(item)}
-                onRemoveFromCart={() => handleRemoveFromCart(item)} // A mesma função pode ser usada para adicionar e remover
-                isAdded={isItemInCart(item.id)}
-              />
+              <AddToCart item={{ ...item, isCustom: true }} />
             </View>
           ))}
 
@@ -354,18 +346,20 @@ const styles = StyleSheet.create({
     marginTop: '90%',
   },
   cartItems: {
-    width: 48,
-    height: 48,
+    width: 50,
+    height: 50,
     marginRight: '5%',
-    marginTop: '90%',
+    marginTop: '85%',
   },
   numberCartItems: {
     position: 'absolute',
     width: 48,
     height: 48,
-    left: 352,
-    top: 63,
+    left: 334,
+    top: 62,
     color: '#FFFFFF',
+    textAlign: 'center',
+    zIndex: 4,
   },
   shopContainer: {
     display: 'flex',
@@ -374,7 +368,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     margin: '5%',
     gap: 25,
-
     zIndex: 1,
   },
   shopItemFlex: {
