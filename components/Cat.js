@@ -201,6 +201,7 @@ const Cat = () => {
         }
 
         if (color === "white") {
+            if (isDirty && isEating) { setDisplayImage("dirty-cat-eating"); }
             if (isEating) { setDisplayImage("cat-eating-white"); }
             else if (happiness >= 100 && !animationPlayed) {
                 const frames = [
