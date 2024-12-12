@@ -36,28 +36,6 @@ export default function HomeScreen() {
         <Header />
       </View>
       
-      <View style={styles.flex}>
-        {/* clothing */}
-        {clothing && (
-          <Image
-            source={imageMap[clothing]}
-            style={styles.clothing}
-          />
-        )}
-        {/* bow */}
-        {bow && (
-          <Image
-            source={imageMap[bow]}
-            style={styles.bow}
-          />
-        )}
-        {glasses && (
-          <Image
-            source={imageMap[glasses]}
-            style={styles.glasses}
-          />
-        )}
-      </View>
 
       <Cat />
       { !isEating && fish > 0 ? (

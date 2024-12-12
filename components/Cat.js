@@ -258,25 +258,25 @@ const Cat = () => {
             />
 
             {/* clothing */}
-        {clothing && (
-          <Image
-            source={imageClothesMap[clothing]}
-            style={styles.clothing}
-          />
-        )}
-        {/* bow */}
-        {bow && (
-          <Image
-            source={imageClothesMap[bow]}
-            style={styles.bow}
-          />
-        )}
-        {glasses && (
-          <Image
-            source={imageClothesMap[glasses]}
-            style={styles.glasses}
-          />
-        )}
+            {clothing && (
+            <Image
+                source={imageClothesMap[clothing]}
+                style={styles.clothing}
+            />
+            )}
+            {/* bow */}
+            {bow && (
+            <Image
+                source={imageClothesMap[bow]}
+                style={styles.bow}
+            />
+            )}
+            {glasses && (
+            <Image
+                source={imageClothesMap[glasses]}
+                style={styles.glasses}
+            />
+            )}
         </View>
     );
 };
@@ -304,25 +304,26 @@ const styles = StyleSheet.create({
         width: 150,
         height: 60,
         position: "absolute",
-        bottom: 113,
-        left: 139,
-        zIndex: 1,
-      },
-      bow: {
+        left: "31.2%",
+        top: "70%",
+        zIndex: 2,
+    },
+    bow: {
         width: 50,
         height: 50,
         position: "absolute",
-        zIndex: 1,
-        bottom: 250,
-      },
-      glasses: {
-        width: 190,
-        height: 150,
+        left: "43.5%",
+        top: "49%",
+        zIndex: 2,
+    },
+    glasses: {
+        width: 170,
+        height: 140,
         position: "absolute",
-        zIndex: 1,
-        bottom: 150,
-        left: 120,
-      },
+        left: "29%",
+        top: "48%",
+        zIndex: 2,
+    },
 });
 
 export default Cat;
