@@ -246,13 +246,13 @@ export default function ShopScreen() {
           {shopItems.map((item) => (
             <View key={item.id} style={styles.shopItemFlex}>
               <ShopItem image={item.image} name={item.name} price={item.price} />
-              <AddToCart item={item} />
+              <AddToCart item={item} isAdded={isItemInCart} />
             </View>
           ))}
           {customItems.map((item) => (
             <View key={item.id} style={styles.shopItemFlex}>
               <ShopItem image={item.image} name={item.name} price={item.price} />
-              <AddToCart item={{ ...item, isCustom: true }} />
+              <AddToCart item={item} isAdded={isItemInCart} />
             </View>
           ))}
 

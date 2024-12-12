@@ -12,7 +12,7 @@ import { useFish } from '@/contexts/FishContext';
 export default function Cart() {
     const router = useRouter();
 
-    const { quantities, cart, setCartCount, removeFromCart, clearCart, findItemByName, handleQuantityChange, calculateTotal } = useCart();
+    const { quantities, cart, setQuantities, removeFromCart, clearCart, findItemByName, handleQuantityChange, calculateTotal } = useCart();
     const { coins, setCoins } = useCoin();
     const { setFish } = useFish();
 
@@ -33,11 +33,6 @@ export default function Cart() {
         }
     };
 
-    const handleClearCart = () => {
-        setCartCount(0);
-        clearCart();
-    };
-
     const handleBuy = (total) => {
 
         if (total === 0) {
@@ -52,14 +47,14 @@ export default function Cart() {
 
         setCustom(cart.map(i => i.name))
 
-
+        setQuantities({});
         setCoins(coins - total);
         const fishItem = findItemByName('Fish'); 
         if (fishItem) {
             const quantity = quantities[fishItem.id] || 1;  
             setFish(prevFish => prevFish + quantity); 
         }
-        handleClearCart();
+        clearCart();
         alert('Thank you for your purchase!');
         router.push('/shop');
     }

@@ -7,6 +7,7 @@ export const CartProvider = ({ children }) => {
     const [cartCount, setCartCount] = useState(0);
     const [isAdded, setIsAdded] = useState(false);
     const [quantities, setQuantities] = useState({});
+    
 
     const findItemInCart = (productId) => {
         return cart.find((item) => item.id === productId);
@@ -27,6 +28,7 @@ export const CartProvider = ({ children }) => {
                         : cartItem
                 );
             }
+            console.log(cart);
             return [...prevCart, { ...item, quantity: 1 }];
         });
         setQuantities((prev) => ({
@@ -47,6 +49,7 @@ export const CartProvider = ({ children }) => {
 
     const clearCart = () => {
         setCart([]);
+        setCartCount(0);
     };
 
     const handleQuantityChange = (productId, value) => {
@@ -79,6 +82,7 @@ export const CartProvider = ({ children }) => {
                 findItemInCart,
                 findItemByName,
                 quantities,
+                setQuantities,
                 handleQuantityChange,
                 calculateTotal,
             }}

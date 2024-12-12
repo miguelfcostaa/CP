@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { useCart } from '@/contexts/CartContext';
 
-const AddToCart = ({ item }) => { 
+const AddToCart = ({ item, isAdded }) => { 
     const { addToCart, removeFromCart, quantities, handleQuantityChange } = useCart();
-    const [customItemAdded, setCustomItemAdded] = useState(false);
 
     const quantity = quantities[item.id] || 0;
-    const isAdded = quantity > 0;
 
     const handleIncrease = () => {
         if (quantity >= 10) {
@@ -27,29 +25,9 @@ const AddToCart = ({ item }) => {
         }
     };
 
-    const handleAddCustomItem = () => {
-        setCustomItemAdded(true);
-        addToCart(item, 1); 
-    };
-
-    const handleRemoveCustomItem = () => {
-        setCustomItemAdded(false);
-        removeFromCart(item.id);
-    }
-
     return (
        <>
-            {item.isCustom && !customItemAdded ? (
-                <TouchableOpacity onPress={handleAddCustomItem} style={styles.container}>
-                    <Text style={styles.text}>ADD TO CART</Text>
-                    <Image source={require('@/assets/icons/cart_icon.png')} style={styles.image} />
-                </TouchableOpacity>
-
-            ) : customItemAdded ? (
-                <TouchableOpacity onPress={handleRemoveCustomItem} style={styles.container_added} >
-                    <Image source={require('@/assets/icons/check_icon.png')} style={styles.icon_added} />
-                </TouchableOpacity>
-            ) : isAdded ? (
+            {isAdded && quantity > 0 ? (
                 <View style={styles.container_added}>
                     <TouchableOpacity onPress={handleDecrease} style={styles.buttonSub}>
                         <Image source={require('@/assets/icons/sub_icon.png')} style={styles.sub} />
@@ -82,9 +60,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 10,
         gap: 10,
-    },
-    disabledButton: {
-        backgroundColor: '#9D9D9D', 
     },
     text: {
         color: 'white',
@@ -131,10 +106,6 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    icon_added: {
-        width: 20,
-        height: 20,
     },
     sub: {
         height: 33,
