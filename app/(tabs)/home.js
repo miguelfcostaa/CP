@@ -1,15 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '@/components/Header';
 import { Image, StyleSheet, View, Dimensions, TouchableOpacity, Text } from 'react-native';
 import Cat from '@/components/Cat';
 import { useCat } from '@/contexts/CatContext';
 import { useFish } from '@/contexts/FishContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '@/firebaseConfig';
+import { where, query } from 'firebase/firestore';
 
 const { width, height } = Dimensions.get('window');
 
 export default function HomeScreen() {
   const { happiness, setHappiness, hungry, setHungry, isEating, setIsEating } = useCat();
   const { fish, setFish } = useFish();
+  const [itemsLocked, setItemsLocked] = useState([]);
 
   const handleEating = () => {
     setFish(fish - 1);
@@ -18,8 +23,40 @@ export default function HomeScreen() {
       setIsEating(false);
       setHungry(hungry + 20);
       setHappiness(happiness + 10);
-    }, 3000);      
+    }, 3000);
   }
+
+  useEffect(() => {
+    const fetchLockedItems = async () => {
+      try {
+        const itemsCollection = collection(db, 'customItems');
+        let queryRef = query(itemsCollection, where("category", "!=", "skin"))
+        let itemsSnapshot = await getDocs(queryRef);
+        if (itemsSnapshot.empty) {
+          console.log("Não há items nestas categorias.");
+        } else {
+          const item = itemsSnapshot.docs.map(doc => {
+            return { id: doc.id, ...doc.data() };
+          });
+          setItemsLocked(item)
+          addLock(item)
+          console.log("bloqueadas no home: " + item.map(i => i.name))
+        }
+      } catch (error) {
+        console.error("Erro ao buscar itens da personalização:", error.message);
+      }
+    }
+    const addLock = async (objs) => {
+      try {
+        
+        await AsyncStorage.setItem("lockedClothes", JSON.stringify(objs));
+      }
+      catch (er) {
+        console.error('Error saving data', er);
+      }
+    }
+    fetchLockedItems()
+  }, [])
 
   return (
     <View style={styles.container}>
@@ -32,22 +69,22 @@ export default function HomeScreen() {
       <View style={styles.header}>
         <Header />
       </View>
-      
+
 
       <Cat />
-      { !isEating && fish > 0 ? (
+      {!isEating && fish > 0 ? (
         <TouchableOpacity onPress={() => handleEating()}>
           <Image
             source={require('@/assets/images/fish-icon.png')}
             style={styles.fish}
-          /> 
+          />
         </TouchableOpacity>
       ) : (
         <TouchableOpacity onPress={() => handleEating()} disabled>
           <Image
             source={require('@/assets/images/fish-icon.png')}
             style={[styles.fish, { opacity: 0.5 }]}
-          /> 
+          />
         </TouchableOpacity>
       )}
       <Text style={styles.numberFish}> x{fish} </Text>

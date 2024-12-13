@@ -29,19 +29,8 @@ export default function Customization() {
         const fetchShopItems = async () => {
             try {
                 const itemsCollection = collection(db, 'customItems');
-                let queryRef = query(itemsCollection, where("category", "!=", "skin"))
+                let queryRef = query(itemsCollection, where("category", "==", "skin"))
                 let itemsSnapshot = await getDocs(queryRef);
-                if (itemsSnapshot.empty) {
-                    console.log("Não há items nestas categorias.");
-                } else {
-                    const item = itemsSnapshot.docs.map(doc => {
-                        return { id: doc.id, ...doc.data() };
-                    });
-                    setItemsLocked(item)
-                }
-
-                queryRef = query(itemsCollection, where("category", "==", "skin"))
-                itemsSnapshot = await getDocs(queryRef);
                 if (itemsSnapshot.empty) {
                     console.log("Não há items da categoria 'skin'.");
                 } else {
@@ -89,38 +78,28 @@ export default function Customization() {
             }
         };
         fetchShopItems();
+        fetchLockedClothes();
     }, []);
 
+    const fetchLockedClothes = async () => {
+        try {
+            const lockedClothes = await AsyncStorage.getItem("lockedClothes");
+            if (lockedClothes) {
+                setItemsLocked(JSON.parse(lockedClothes));
+            }
+        } catch (error) {
+            console.error("Error fetching locked clothes:", error);
+        }
+    };
     useFocusEffect(
         React.useCallback(() => {
-            const fetchLockedClothes = async () => {
-                try {
-                    const lockedClothes = await AsyncStorage.getItem("lockedClothes");
-                    if (lockedClothes) {
-                        setItemsLocked(JSON.parse(lockedClothes));
-                    }
-                } catch (error) {
-                    console.error("Error fetching locked clothes:", error);
-                }
-            };
-
             fetchLockedClothes();
         }, [])
     );
 
-    const addLock = async () => {
-        try {
-            await AsyncStorage.setItem("lockedClothes", JSON.stringify(itemsLocked));
-        }
-        catch (er) {
-            console.error('Error saving data', er);
-        }
-    }
     const update = async (itemName, itemStored) => {
         try {
-            log("a guardar: " + itemName)
             const current = await AsyncStorage.getItem(itemStored)
-            log("guardado: " + current)
             if (itemName !== current && itemName) {
                 setColor(itemName);
                 console.log("cor: " + itemName)
@@ -135,10 +114,6 @@ export default function Customization() {
         }
     };
 
-    const log = (info) => {
-        console.log(info)
-    }
-    addLock()
     return (
         <View style={styles.background}>
             <>
@@ -196,7 +171,6 @@ export default function Customization() {
                                                 style={styles.clothing}
                                             />
                                         </TouchableOpacity>
-                                        {/* {log(item.name)} */}
                                         {itemsLocked.some((lockedItem) => lockedItem.name === item.name) && (
                                             <Image
                                                 source={require("@/assets/images/lock-icon.png")}
@@ -227,7 +201,6 @@ export default function Customization() {
                                                 style={styles.bow}
                                             />
                                         </TouchableOpacity>
-                                        {/* {log(item.name)} */}
                                         {itemsLocked.some((lockedItem) => lockedItem.name === item.name) && (
                                             <Image
                                                 source={require("@/assets/images/lock-icon.png")}
@@ -258,7 +231,6 @@ export default function Customization() {
                                                 style={styles.bow}
                                             />
                                         </TouchableOpacity>
-                                        {/* {log(item.name)} */}
                                         {itemsLocked.some((lockedItem) => lockedItem.name === item.name) && (
                                             <Image
                                                 source={require("@/assets/images/lock-icon.png")}
