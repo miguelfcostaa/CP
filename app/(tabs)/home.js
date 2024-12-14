@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebaseConfig';
 import { where, query } from 'firebase/firestore';
+import { useRouter } from 'expo-router';
 
 const { width, height } = Dimensions.get('window');
 
@@ -48,7 +49,7 @@ export default function HomeScreen() {
     }
     const addLock = async (objs) => {
       try {
-        
+
         await AsyncStorage.setItem("lockedClothes", JSON.stringify(objs));
       }
       catch (er) {
@@ -57,6 +58,8 @@ export default function HomeScreen() {
     }
     fetchLockedItems()
   }, [])
+
+  const router = useRouter();
 
   return (
     <View style={styles.container}>
@@ -88,6 +91,14 @@ export default function HomeScreen() {
         </TouchableOpacity>
       )}
       <Text style={styles.numberFish}> x{fish} </Text>
+      <TouchableOpacity
+        style={styles.roundButton}
+        onPress={() => router.push('/history')}>
+        <Image
+          source={require('@/assets/icons/question-mark.png')}
+          style={styles.icon}
+        />
+      </TouchableOpacity>
 
     </View>
 
@@ -146,7 +157,27 @@ const styles = StyleSheet.create({
     textShadowColor: 'rgba(0, 0, 0, 0.25)',
     textShadowOffset: { width: 0, height: 4 },
     textShadowRadius: 4,
-
+  },
+  roundButton: {
+    width: width * 0.12,
+    height: width * 0.12,
+    borderRadius: (width * 0.2) / 2,
+    backgroundColor: '#54BEFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    top: height * 0.18,
+    right: width * 0.05,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  icon: {
+    width: '70%',
+    height: '70%',
+    resizeMode: 'contain',
   },
 
 });
