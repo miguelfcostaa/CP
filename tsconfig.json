@@ -13,5 +13,5 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-, "app/(tabs)/home.js", "app/(tabs)/shop.js", "app/(tabs)/cart.js", "app/(tabs)/shower.js", "app/(tabs)/friends.js" , "app/(tabs)/index.js" ]
+, "app/(tabs)/home.js", "app/(tabs)/shop.js", "app/(tabs)/cart.js", "app/(tabs)/shower.js", "app/(tabs)/friends.js" , "app/(tabs)/index.js", "app/(tabs)/history2.js", "app/(tabs)/history.js" ]
 }
